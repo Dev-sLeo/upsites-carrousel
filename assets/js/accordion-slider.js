@@ -33,33 +33,46 @@
       };
     },
 
-    // ── Desktop accordion setup ──────────────────────────
+    // ── Desktop accordion ────────────────────────────────
     setupDesktop: function (wrapper, slider, cards, defaultActive, widths) {
       var widthFechado = widths.fechado;
       var widthAberto  = widths.aberto;
 
       // Initial state
       cards.forEach(function (card, i) {
+        var bg   = card.querySelector(".upsites-accordion-slide__bg");
+        var logo = card.querySelector(".upsites-accordion-slide__logo");
+
         if (i === defaultActive) {
           gsap.set(card, { width: widthAberto });
           gsap.set(card.querySelector(".upsites-accordion-slide__content"), {
             display: "flex", justifyContent: "flex-end",
             alignItems: "flex-start", opacity: 1, y: 0,
           });
-          gsap.set(card.querySelector(".upsites-accordion-slide__arrow"),   { opacity: 1, scale: 1 });
-          var logo = card.querySelector(".upsites-accordion-slide__logo");
-          if (logo) gsap.set(logo, { justifyContent: "flex-start", alignItems: "flex-end" });
+          gsap.set(card.querySelector(".upsites-accordion-slide__arrow"), { opacity: 1, scale: 1 });
+          if (bg)   gsap.set(bg,   { scale: 1 });
+          if (logo) gsap.set(logo, { justifyContent: "flex-start", alignItems: "flex-end", opacity: 1 });
           card.classList.add("is-active");
         } else {
           gsap.set(card, { width: widthFechado });
           gsap.set(card.querySelector(".upsites-accordion-slide__content"), { opacity: 0, display: "none" });
           gsap.set(card.querySelector(".upsites-accordion-slide__arrow"),   { opacity: 0, scale: 0.7 });
-          var logo = card.querySelector(".upsites-accordion-slide__logo");
-          if (logo) gsap.set(logo, { justifyContent: "center", alignItems: "center" });
+          if (bg)   gsap.set(bg,   { scale: 1 });
+          if (logo) gsap.set(logo, { justifyContent: "center", alignItems: "center", opacity: 1 });
+        }
+
+        // Zoom on hover
+        if (bg) {
+          card.addEventListener("mouseenter", function () {
+            gsap.to(bg, { scale: 1.2, duration: 0.5, ease: "power2.out" });
+          });
+          card.addEventListener("mouseleave", function () {
+            gsap.to(bg, { scale: 1, duration: 0.5, ease: "power2.out" });
+          });
         }
       });
 
-      // Hover events
+      // Hover: expand / collapse
       cards.forEach(function (card) {
         card.addEventListener("mouseenter", function () {
           if (card.classList.contains("is-active")) return;
@@ -68,51 +81,112 @@
           if (prevCard) {
             prevCard.classList.remove("is-active");
             gsap.to(prevCard, { width: widthFechado, duration: 0.6, ease: "power2.out" });
+
+            // Content: fade out
             gsap.to(prevCard.querySelector(".upsites-accordion-slide__content"), {
               opacity: 0, duration: 0.15,
               onComplete: function () {
                 gsap.set(prevCard.querySelector(".upsites-accordion-slide__content"), { display: "none" });
               },
             });
-            gsap.to(prevCard.querySelector(".upsites-accordion-slide__arrow"), { opacity: 0, scale: 0.7, duration: 0.25 });
+
+            // Arrow: kill + hide instantly
+            var prevArrow = prevCard.querySelector(".upsites-accordion-slide__arrow");
+            gsap.killTweensOf(prevArrow);
+            gsap.set(prevArrow, { opacity: 0, scale: 0.7 });
+
+            // Logo: kill any running tween, snap back to center instantly
             var prevLogo = prevCard.querySelector(".upsites-accordion-slide__logo");
-            if (prevLogo) gsap.to(prevLogo, { justifyContent: "center", alignItems: "center", duration: 0.4, ease: "power2.out" });
+            if (prevLogo) {
+              gsap.killTweensOf(prevLogo);
+              gsap.set(prevLogo, { justifyContent: "center", alignItems: "center", opacity: 1 });
+            }
           }
 
           card.classList.add("is-active");
           gsap.to(card, { width: widthAberto, duration: 0.6, ease: "power2.out" });
 
+          // Logo: snap to bottom-left position, then fade in
           var logo = card.querySelector(".upsites-accordion-slide__logo");
-          if (logo) gsap.to(logo, { justifyContent: "flex-start", alignItems: "flex-end", duration: 0.4, ease: "power2.out" });
+          if (logo) {
+            gsap.killTweensOf(logo);
+            gsap.set(logo, { justifyContent: "flex-start", alignItems: "flex-end", opacity: 0 });
+            gsap.to(logo, { opacity: 1, duration: 0.35, delay: 0.2, ease: "power2.out" });
+          }
 
+          // Content: fade-up
           var content = card.querySelector(".upsites-accordion-slide__content");
-          gsap.set(content, { display: "flex" });
-          gsap.to(content, { opacity: 1, duration: 0.4, delay: 0.25, ease: "power2.out" });
+          gsap.set(content, { display: "flex", opacity: 0, y: 16 });
+          gsap.to(content,  { opacity: 1, y: 0, duration: 0.4, delay: 0.2, ease: "power2.out" });
 
-          gsap.to(card.querySelector(".upsites-accordion-slide__arrow"), { opacity: 1, scale: 1, duration: 0.4, delay: 0.25, ease: "power2.out" });
+          // Arrow
+          var arrow = card.querySelector(".upsites-accordion-slide__arrow");
+          gsap.killTweensOf(arrow);
+          gsap.to(arrow, {
+            opacity: 1, scale: 1, duration: 0.4, delay: 0.25, ease: "power2.out",
+            onStart: function () {
+              if (!card.classList.contains("is-active")) gsap.set(arrow, { opacity: 0, scale: 0.7 });
+            },
+          });
         });
       });
     },
 
-    // ── Mobile tab bar setup ─────────────────────────────
+    // ── Mobile tab bar ───────────────────────────────────
     setupMobile: function (wrapper, cards, tabs, defaultActive) {
-      function activate(index) {
-        cards.forEach(function (card, i) {
-          card.classList.toggle("is-active", i === index);
-          // Apply mobile bg position
-          AccordionSlider.applyResponsive(card, true);
-        });
-        tabs.forEach(function (tab, i) {
-          tab.classList.toggle("is-active", i === index);
+      var currentIndex = defaultActive;
+
+      function activate(nextIndex) {
+        if (nextIndex === currentIndex) return;
+
+        var prevCard    = cards[currentIndex];
+        var nextCard    = cards[nextIndex];
+        var prevContent = prevCard.querySelector(".upsites-accordion-slide__content");
+        var prevArrow   = prevCard.querySelector(".upsites-accordion-slide__arrow");
+
+        // Fade-down exit
+        gsap.to([prevContent, prevArrow], {
+          opacity: 0, y: 20, duration: 0.22, ease: "power2.in",
+          onComplete: function () {
+            prevCard.classList.remove("is-active");
+            tabs[currentIndex].classList.remove("is-active");
+
+            currentIndex = nextIndex;
+
+            nextCard.classList.add("is-active");
+            tabs[nextIndex].classList.add("is-active");
+            AccordionSlider.applyResponsive(nextCard, true);
+
+            var nextContent = nextCard.querySelector(".upsites-accordion-slide__content");
+            var nextArrow   = nextCard.querySelector(".upsites-accordion-slide__arrow");
+
+            // Fade-up enter
+            gsap.fromTo(
+              [nextContent, nextArrow],
+              { opacity: 0, y: -20 },
+              { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" }
+            );
+          },
         });
       }
 
-      activate(defaultActive);
+      // Set initial active state
+      cards.forEach(function (card, i) {
+        card.classList.toggle("is-active", i === currentIndex);
+        AccordionSlider.applyResponsive(card, true);
+      });
+      tabs.forEach(function (tab, i) {
+        tab.classList.toggle("is-active", i === currentIndex);
+      });
+
+      // Set initial content visible (no animation on load)
+      var initContent = cards[currentIndex].querySelector(".upsites-accordion-slide__content");
+      var initArrow   = cards[currentIndex].querySelector(".upsites-accordion-slide__arrow");
+      gsap.set([initContent, initArrow], { opacity: 1, y: 0 });
 
       tabs.forEach(function (tab) {
         tab.addEventListener("click", function () {
-          var index = parseInt(tab.dataset.index, 10);
-          activate(index);
+          activate(parseInt(tab.dataset.index, 10));
         });
       });
     },
@@ -124,7 +198,7 @@
       var cards         = Array.from(slider.querySelectorAll(".upsites-accordion-slide"));
       var tabs          = Array.from(wrapper.querySelectorAll(".upsites-accordion-tab"));
 
-      // CSS variables for overlays
+      // CSS overlay variables
       var overlayStart = $wrapper.data("overlay-start");
       var overlayEnd   = $wrapper.data("overlay-end");
       if (overlayStart) wrapper.style.setProperty("--upsites-overlay-start", overlayStart);
@@ -136,9 +210,8 @@
       });
 
       var isMobile = window.matchMedia("(max-width: 1024px)");
-
-      var gap    = parseInt(window.getComputedStyle(slider).gap) || 20;
-      var widths = AccordionSlider.computeWidths(slider, cards.length, gap);
+      var gap      = parseInt(window.getComputedStyle(slider).gap) || 20;
+      var widths   = AccordionSlider.computeWidths(slider, cards.length, gap);
 
       if (isMobile.matches) {
         AccordionSlider.setupMobile(wrapper, cards, tabs, defaultActive);
@@ -146,9 +219,8 @@
         AccordionSlider.setupDesktop(wrapper, slider, cards, defaultActive, widths);
       }
 
-      // Switch mode on breakpoint change
+      // Breakpoint switch
       isMobile.addEventListener("change", function (e) {
-        // Reset all inline GSAP styles
         cards.forEach(function (card) {
           gsap.set(card, { clearProps: "all" });
           gsap.set(card.querySelector(".upsites-accordion-slide__content"), { clearProps: "all" });
@@ -160,7 +232,6 @@
         tabs.forEach(function (tab) { tab.classList.remove("is-active"); });
 
         var newWidths = AccordionSlider.computeWidths(slider, cards.length, gap);
-
         if (e.matches) {
           AccordionSlider.setupMobile(wrapper, cards, tabs, defaultActive);
         } else {
@@ -168,7 +239,7 @@
         }
       });
 
-      // Resize: recalculate desktop widths only
+      // Resize: recalculate desktop widths
       var resizeTimer;
       window.addEventListener("resize", function () {
         if (isMobile.matches) return;
@@ -187,9 +258,7 @@
   $(window).on("elementor/frontend/init", function () {
     elementorFrontend.hooks.addAction(
       "frontend/element_ready/upsites-accordion-slider.default",
-      function ($scope) {
-        AccordionSlider.init($scope);
-      }
+      function ($scope) { AccordionSlider.init($scope); }
     );
   });
 

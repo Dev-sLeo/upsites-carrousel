@@ -179,6 +179,18 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 			]
 		);
 
+		// ── Link ─────────────────────────────────────────────────────
+		$repeater->add_control(
+			'slide_link',
+			[
+				'label'         => __( 'Link do card', 'upsites-addons' ),
+				'type'          => Controls_Manager::URL,
+				'placeholder'   => 'https://',
+				'show_external' => true,
+				'separator'     => 'before',
+			]
+		);
+
 		// ── Overlay ──────────────────────────────────────────────────
 		$repeater->add_control(
 			'overlay_color',
@@ -286,6 +298,30 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 				'selectors'  => [
 					'{{WRAPPER}} .upsites-accordion-slider' => 'gap: {{SIZE}}{{UNIT}};',
 				],
+			]
+		);
+
+		$this->add_control(
+			'inactive_grayscale',
+			[
+				'label'        => __( 'Cinza nos slides inativos', 'upsites-addons' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Sim', 'upsites-addons' ),
+				'label_off'    => __( 'Não', 'upsites-addons' ),
+				'return_value' => 'yes',
+				'default'      => '',
+				'separator'    => 'before',
+			]
+		);
+
+		$this->add_control(
+			'inactive_grayscale_color',
+			[
+				'label'     => __( 'Cor do filtro', 'upsites-addons' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#656565',
+				'condition' => [ 'inactive_grayscale' => 'yes' ],
+				'description' => __( 'Cor usada como referência de cinza (afeta a intensidade do filtro)', 'upsites-addons' ),
 			]
 		);
 
@@ -405,12 +441,13 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 
 		$overlay_start = ! empty( $settings['overlay_inactive_start'] ) ? $settings['overlay_inactive_start'] : 'rgba(77,45,120,0)';
 		$overlay_end   = ! empty( $settings['overlay_inactive_end'] )   ? $settings['overlay_inactive_end']   : 'rgba(77,45,120,0.5)';
+		$grayscale     = ! empty( $settings['inactive_grayscale'] ) && 'yes' === $settings['inactive_grayscale'];
 
 		if ( empty( $slides ) ) {
 			return;
 		}
 		?>
-		<div class="upsites-accordion-wrapper"
+		<div class="upsites-accordion-wrapper<?php echo $grayscale ? ' has-grayscale' : ''; ?>"
 			data-default-active="<?php echo esc_attr( $default_active ); ?>"
 			data-overlay-start="<?php echo esc_attr( $overlay_start ); ?>"
 			data-overlay-end="<?php echo esc_attr( $overlay_end ); ?>">
@@ -459,6 +496,9 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					$overlay_color = ! empty( $slide['overlay_color'] ) ? $slide['overlay_color'] : 'rgba(77,45,120,0.7)';
 					$logo_width    = ! empty( $slide['slide_logo_width']['size'] )        ? intval( $slide['slide_logo_width']['size'] )        : 160;
 					$logo_width_mb = ! empty( $slide['slide_logo_width_mobile']['size'] ) ? intval( $slide['slide_logo_width_mobile']['size'] ) : 80;
+					$link_url      = ! empty( $slide['slide_link']['url'] ) ? $slide['slide_link']['url'] : '';
+					$link_target   = ! empty( $slide['slide_link']['is_external'] ) ? '_blank' : '_self';
+					$link_nofollow = ! empty( $slide['slide_link']['nofollow'] ) ? ' rel="nofollow"' : '';
 				?>
 				<div class="upsites-accordion-slide<?php echo esc_attr( $active_class ); ?>"
 					data-index="<?php echo esc_attr( $index ); ?>"
@@ -497,7 +537,16 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					</div>
 					<?php endif; ?>
 
-					<div class="upsites-accordion-slide__arrow">
+					<?php if ( $link_url ) : ?>
+				<a class="upsites-accordion-slide__link"
+					href="<?php echo esc_url( $link_url ); ?>"
+					target="<?php echo esc_attr( $link_target ); ?>"
+					<?php echo $link_nofollow; ?>
+					aria-label="<?php echo esc_attr( $slide['slide_title'] ?? '' ); ?>">
+				</a>
+				<?php endif; ?>
+
+				<div class="upsites-accordion-slide__arrow">
 						<?php /* Desktop arrow */ ?>
 						<svg class="upsites-arrow-desktop" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 							<path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
