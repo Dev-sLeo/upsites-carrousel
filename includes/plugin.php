@@ -24,9 +24,20 @@ final class UpSites_Addons {
 			return;
 		}
 
+		add_action( 'elementor/elements/categories_registered', [ $this, 'register_categories' ] );
 		add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ] );
 		add_action( 'elementor/frontend/after_enqueue_styles', [ $this, 'enqueue_styles' ] );
 		add_action( 'elementor/frontend/after_register_scripts', [ $this, 'register_scripts' ] );
+	}
+
+	public function register_categories( $elements_manager ) {
+		$elements_manager->add_category(
+			'upsites',
+			[
+				'title' => __( 'UpSites', 'upsites-addons' ),
+				'icon'  => 'eicon-font',
+			]
+		);
 	}
 
 	public function register_widgets( $widgets_manager ) {

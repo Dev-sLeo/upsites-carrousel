@@ -23,7 +23,7 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 	}
 
 	public function get_categories() {
-		return [ 'general' ];
+		return [ 'upsites' ];
 	}
 
 	public function get_script_depends() {
