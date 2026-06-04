@@ -43,6 +43,9 @@ final class UpSites_Addons {
 	public function register_widgets( $widgets_manager ) {
 		require_once UPSITES_ADDONS_PATH . 'includes/widgets/accordion-slider.php';
 		$widgets_manager->register( new \UpSites_Accordion_Slider_Widget() );
+
+		require_once UPSITES_ADDONS_PATH . 'includes/widgets/cards-carousel.php';
+		$widgets_manager->register( new \UpSites_Cards_Carousel_Widget() );
 	}
 
 	public function enqueue_styles() {
@@ -52,20 +55,26 @@ final class UpSites_Addons {
 			[],
 			UPSITES_ADDONS_VERSION
 		);
+		wp_enqueue_style(
+			'upsites-cards-carousel',
+			UPSITES_ADDONS_URL . 'assets/css/cards-carousel.css',
+			[],
+			UPSITES_ADDONS_VERSION
+		);
 	}
 
 	public function register_scripts() {
 		wp_register_script(
-			'gsap',
-			'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
-			[],
-			'3.12.5',
+			'upsites-accordion-slider',
+			UPSITES_ADDONS_URL . 'assets/js/accordion-slider.js',
+			[ 'jquery' ],
+			UPSITES_ADDONS_VERSION,
 			true
 		);
 		wp_register_script(
-			'upsites-accordion-slider',
-			UPSITES_ADDONS_URL . 'assets/js/accordion-slider.js',
-			[ 'jquery', 'gsap' ],
+			'upsites-cards-carousel',
+			UPSITES_ADDONS_URL . 'assets/js/cards-carousel.js',
+			[],
 			UPSITES_ADDONS_VERSION,
 			true
 		);

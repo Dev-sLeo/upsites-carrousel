@@ -1,0 +1,230 @@
+// UpSites — Carrossel Cards
+
+// ── Variables ──────────────────────────────────────────────
+$color-bg-gradient-start: #8e52de;
+$color-bg-gradient-end: #4e2e79;
+$color-bg-angle: 114deg;
+$color-white: #fff;
+$color-overlay: rgba(255, 255, 255, 0.1);
+
+$radius-card: 30px;
+$radius-image: 25px;
+$radius-image-mobile: 16px;
+$radius-icon: 10px;
+
+$height-card: 580px;
+$height-card-tablet: 402px;
+
+$padding-card: 52px;
+$padding-card-tablet: 32px;
+$padding-card-mobile: 24px;
+
+$icon-size: 72px;
+$icon-img: 32px;
+$icon-size-tablet: 56px;
+$icon-img-tablet: 24px;
+$icon-size-mobile: 48px;
+$icon-img-mobile: 21px;
+
+$title-size: 40px;
+$title-size-tablet: 32px;
+$title-size-mobile: 24px;
+
+$desc-size: 24px;
+$desc-size-tablet: 16px;
+
+$bp-tablet: 1024px;
+$bp-mobile: 767px;
+
+// ── Wrapper — height and position set by JS ───────────────
+.upsites-cards-carousel {
+	width: 100%;
+	position: relative;
+}
+
+// ── Card wrapper — position set by JS ─────────────────────
+.upsites-cc-card-wrapper {
+	width: 100%;
+}
+
+// ── Cards ──────────────────────────────────────────────────
+.upsites-cc-card {
+	width: 100%;
+	height: $height-card;
+	border-radius: $radius-card;
+	overflow: hidden;
+	background: linear-gradient($color-bg-angle, $color-bg-gradient-start 43%, $color-bg-gradient-end 100%);
+
+	// ── Inner layout ──────────────────────────────────────
+	&__inner {
+		display: flex;
+		height: 100%;
+		width: 100%;
+	}
+
+	&__left {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		gap: 32px;
+		width: 46%;
+		padding: $padding-card;
+		flex-shrink: 0;
+	}
+
+	&__right {
+		flex: 1;
+		padding: $padding-card $padding-card $padding-card 0;
+		display: flex;
+		align-items: stretch;
+		min-width: 0;
+	}
+
+	// ── Icon ──────────────────────────────────────────────
+	&__icon-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: $icon-size;
+		height: $icon-size;
+		border-radius: $radius-icon;
+		background-color: $color-overlay;
+
+		img {
+			width: $icon-img;
+			height: $icon-img;
+			object-fit: contain;
+		}
+
+		&--empty svg {
+			width: $icon-img;
+			height: $icon-img;
+			color: rgba(255, 255, 255, 0.6);
+		}
+	}
+
+	// ── Text ──────────────────────────────────────────────
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: $title-size;
+		font-weight: 600;
+		line-height: 1.3;
+		color: $color-white;
+	}
+
+	&__desc {
+		margin: 0;
+		font-size: $desc-size;
+		font-weight: 400;
+		line-height: 1.5;
+		color: $color-white;
+	}
+
+	// ── Image ─────────────────────────────────────────────
+	&__image-wrap {
+		width: 100%;
+		height: 100%;
+		border-radius: $radius-image;
+		background-color: $color-overlay;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			max-width: 100%;
+			height: auto;
+			object-fit: cover;
+			display: block;
+		}
+	}
+}
+
+// ── Tablet ─────────────────────────────────────────────────
+@media (max-width: $bp-tablet) {
+	.upsites-cc-card {
+		height: $height-card-tablet;
+
+		&__left {
+			gap: 24px;
+			padding: $padding-card-tablet;
+		}
+
+		&__right {
+			padding: $padding-card-tablet $padding-card-tablet $padding-card-tablet 0;
+		}
+
+		&__title {
+			font-size: $title-size-tablet;
+		}
+
+		&__desc {
+			font-size: $desc-size-tablet;
+		}
+
+		&__icon-wrap {
+			width: $icon-size-tablet;
+			height: $icon-size-tablet;
+
+			img,
+			&--empty svg {
+				width: $icon-img-tablet;
+				height: $icon-img-tablet;
+			}
+		}
+	}
+}
+
+// ── Mobile ─────────────────────────────────────────────────
+@media (max-width: $bp-mobile) {
+	.upsites-cc-card {
+		height: auto;
+		min-height: 500px;
+
+		&__inner {
+			flex-direction: column;
+		}
+
+		&__left {
+			width: 100%;
+			padding: $padding-card-mobile $padding-card-mobile 0;
+			gap: 20px;
+		}
+
+		&__right {
+			flex: 1;
+			padding: 16px $padding-card-mobile $padding-card-mobile;
+			min-height: 200px;
+		}
+
+		&__image-wrap {
+			border-radius: $radius-image-mobile;
+		}
+
+		&__icon-wrap {
+			width: $icon-size-mobile;
+			height: $icon-size-mobile;
+
+			img,
+			&--empty svg {
+				width: $icon-img-mobile;
+				height: $icon-img-mobile;
+			}
+		}
+
+		&__title {
+			font-size: $title-size-mobile;
+		}
+
+		&__desc {
+			font-size: $desc-size-tablet;
+		}
+	}
+}
