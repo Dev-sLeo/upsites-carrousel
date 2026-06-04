@@ -81,6 +81,7 @@ $bp-desktop:              1025px;
 		flex-direction: column;
 		justify-content: flex-start;
 		flex-shrink: 0;
+		width: 100%; // mobile default; desktop/tablet overridden by Elementor
 		gap: $gap-icon-text-mobile; // 24px between icon and text
 		padding: $padding-card-mobile $padding-card-mobile 0;
 	}
@@ -176,7 +177,6 @@ $bp-desktop:              1025px;
 
 		&__left {
 			gap: 32px;
-			width: 46%;
 			padding: $padding-card-tablet;
 			flex-shrink: 0;
 		}

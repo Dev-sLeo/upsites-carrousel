@@ -267,6 +267,41 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
+		$this->add_responsive_control(
+			'column_gap',
+			[
+				'label'          => __( 'Espaço entre colunas', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 120 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 0 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 0 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 31 ],
+				'selectors'      => [
+					'{{WRAPPER}} .upsites-cc-card__inner' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'left_column_width',
+			[
+				'label'          => __( 'Largura da coluna de texto', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ '%', 'px' ],
+				'range'          => [
+					'%'  => [ 'min' => 20, 'max' => 80 ],
+					'px' => [ 'min' => 100, 'max' => 800 ],
+				],
+				'default'        => [ 'unit' => '%', 'size' => 46 ],
+				'tablet_default' => [ 'unit' => '%', 'size' => 46 ],
+				'mobile_default' => [ 'unit' => '%', 'size' => 100 ],
+				'selectors'      => [
+					'{{WRAPPER}} .upsites-cc-card__left' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Ícone ─────────────────────────────────────────
