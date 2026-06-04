@@ -146,31 +146,69 @@ trait UpSites_Cards_Carousel_Controls {
 		);
 
 		$this->add_control(
+			'card_bg_type',
+			[
+				'label'     => __( 'Tipo de fundo', 'upsites-addons' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'gradient',
+				'options'   => [
+					'gradient' => __( 'Gradiente', 'upsites-addons' ),
+					'solid'    => __( 'Cor sólida', 'upsites-addons' ),
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'card_bg_color',
+			[
+				'label'     => __( 'Cor', 'upsites-addons' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#8E52DE',
+				'condition' => [ 'card_bg_type' => 'solid' ],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-cc-card' => '--cc-bg-solid: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
 			'card_bg_start',
 			[
 				'label'     => __( 'Gradiente (início)', 'upsites-addons' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#8E52DE',
-				'separator' => 'before',
+				'condition' => [ 'card_bg_type' => 'gradient' ],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-cc-card' => '--cc-bg-start: {{VALUE}};',
+				],
 			]
 		);
 
 		$this->add_control(
 			'card_bg_end',
 			[
-				'label'   => __( 'Gradiente (fim)', 'upsites-addons' ),
-				'type'    => Controls_Manager::COLOR,
-				'default' => '#4E2E79',
+				'label'     => __( 'Gradiente (fim)', 'upsites-addons' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#4E2E79',
+				'condition' => [ 'card_bg_type' => 'gradient' ],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-cc-card' => '--cc-bg-end: {{VALUE}};',
+				],
 			]
 		);
 
 		$this->add_control(
 			'card_bg_angle',
 			[
-				'label'   => __( 'Ângulo do gradiente', 'upsites-addons' ),
-				'type'    => Controls_Manager::SLIDER,
-				'range'   => [ 'px' => [ 'min' => 0, 'max' => 360 ] ],
-				'default' => [ 'size' => 114 ],
+				'label'     => __( 'Ângulo do gradiente', 'upsites-addons' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [ 'px' => [ 'min' => 0, 'max' => 360 ] ],
+				'default'   => [ 'size' => 114 ],
+				'condition' => [ 'card_bg_type' => 'gradient' ],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-cc-card' => '--cc-bg-angle: {{SIZE}}deg;',
+				],
 			]
 		);
 

@@ -53,7 +53,15 @@ $bp-mobile: 767px;
 	height: $height-card;
 	border-radius: $radius-card;
 	overflow: hidden;
-	background: linear-gradient($color-bg-angle, $color-bg-gradient-start 43%, $color-bg-gradient-end 100%);
+	// Solid color takes priority when --cc-bg-solid is set
+	background: var(
+		--cc-bg-solid,
+		linear-gradient(
+			var(--cc-bg-angle, #{$color-bg-angle}),
+			var(--cc-bg-start, #{$color-bg-gradient-start}) 43%,
+			var(--cc-bg-end,   #{$color-bg-gradient-end})   100%
+		)
+	);
 
 	// ── Inner layout ──────────────────────────────────────
 	&__inner {

@@ -43,10 +43,6 @@ class UpSites_Cards_Carousel_Widget extends Widget_Base {
 			return;
 		}
 
-		$bg_start = ! empty( $settings['card_bg_start'] ) ? $settings['card_bg_start'] : '#8E52DE';
-		$bg_end   = ! empty( $settings['card_bg_end'] )   ? $settings['card_bg_end']   : '#4E2E79';
-		$bg_angle = isset( $settings['card_bg_angle']['size'] ) ? intval( $settings['card_bg_angle']['size'] ) : 114;
-		$gradient = "linear-gradient({$bg_angle}deg, {$bg_start} 43%, {$bg_end} 100%)";
 		?>
 		<div class="upsites-cards-carousel">
 
@@ -59,7 +55,7 @@ class UpSites_Cards_Carousel_Widget extends Widget_Base {
 				$image_alt = ! empty( $card['card_image_alt'] )    ? $card['card_image_alt']    : '';
 			?>
 			<div class="upsites-cc-card-wrapper">
-			<div class="upsites-cc-card" style="background: <?php echo esc_attr( $gradient ); ?>;">
+			<div class="upsites-cc-card">
 
 				<div class="upsites-cc-card__inner">
 
