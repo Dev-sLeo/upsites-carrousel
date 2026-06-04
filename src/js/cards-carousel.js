@@ -20,11 +20,12 @@ function setup(container) {
   gsap.set(container, { height: containerH, position: "relative" });
   wrappers.forEach((wrapper, i) => {
     gsap.set(wrapper, {
-      position: "absolute",
-      top:      STEP_PX * i,
-      left:     0,
-      right:    0,
-      zIndex:   i + 1,
+      position:        "absolute",
+      top:             STEP_PX * i,
+      left:            0,
+      right:           0,
+      zIndex:          i + 1,
+      transformOrigin: "top center", // scale compresses down, top stays fixed
     });
   });
 
@@ -41,7 +42,7 @@ function setup(container) {
   const render = (pSteps) => {
     wrappers.forEach((wrapper, i) => {
 
-      // ─ Y translation ─
+      // ─ Y translation (card entering from below) ─
       if (i === 0) {
         gsap.set(wrapper, { y: 0 });
       } else {
@@ -50,13 +51,28 @@ function setup(container) {
         gsap.set(wrapper, { y: getStartY(i) * (1 - t) });
       }
 
-      // ─ Opacity: buried cards fade proportionally ─
+      // ─ Scale + Opacity ─
+      // scaleStep divides the range 0.9 → 1.0 equally across all cards
+      // so every adjacent pair has the same scale difference
+      const scaleStep = (total - 1) > 0 ? 0.1 / (total - 1) : 0.1;
+
       if (i < total - 1) {
+        // Buried cards: scale down and fade as the next card enters
         const tBury        = Math.max(0, Math.min(1, pSteps - i));
+        const finalScale   = 1.0 - (total - 1 - i) * scaleStep;
         const finalOpacity = (i + 1) / total;
-        gsap.set(wrapper, { opacity: 1 - tBury * (1 - finalOpacity) });
+        gsap.set(wrapper, {
+          scale:   1 - tBury * (1 - finalScale),
+          opacity: 1 - tBury * (1 - finalOpacity),
+        });
       } else {
-        gsap.set(wrapper, { opacity: 1 });
+        // Last card: scale in from one step below 1.0 (matches the card beneath it)
+        const tEnter     = i === 0 ? 1 : Math.max(0, Math.min(1, pSteps - (i - 1)));
+        const startScale = 1.0 - scaleStep;
+        gsap.set(wrapper, {
+          scale:   startScale + tEnter * (1 - startScale),
+          opacity: 1,
+        });
       }
     });
   };
@@ -66,10 +82,12 @@ function setup(container) {
 
   const perStep = () => Math.round(window.innerHeight * 0.9);
 
+  const topOffset = parseInt(container.dataset.topOffset, 10) || 0;
+
   const st = ScrollTrigger.create({
     trigger:             container,
     pin:                 container,
-    start:               "top top",
+    start:               `top top+=${topOffset}`,
     end:                 () => `+=${perStep() * (total - 1)}`,
     scrub:               0.25,
     anticipatePin:       1,

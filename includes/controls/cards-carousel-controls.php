@@ -106,6 +106,19 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
+		$this->add_control(
+			'scroll_top_offset',
+			[
+				'label'       => __( 'Offset do topo (px)', 'upsites-addons' ),
+				'description' => __( 'Use para compensar um header em sticky. O scroll inicia X px abaixo do topo da viewport.', 'upsites-addons' ),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => [ 'px' ],
+				'range'       => [ 'px' => [ 'min' => 0, 'max' => 300 ] ],
+				'default'     => [ 'unit' => 'px', 'size' => 0 ],
+				'separator'   => 'before',
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Card ─────────────────────────────────────────
