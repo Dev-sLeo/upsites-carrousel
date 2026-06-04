@@ -82,12 +82,17 @@ function setup(container) {
 
   const perStep = () => Math.round(window.innerHeight * 0.9);
 
-  const topOffset = parseInt(container.dataset.topOffset, 10) || 0;
+  const getTopOffset = () => {
+    const w = window.innerWidth;
+    if (w <= 767)  return parseInt(container.dataset.topOffsetMobile, 10) || 0;
+    if (w <= 1024) return parseInt(container.dataset.topOffsetTablet, 10) || 0;
+    return parseInt(container.dataset.topOffset, 10) || 0;
+  };
 
   const st = ScrollTrigger.create({
     trigger:             container,
     pin:                 container,
-    start:               `top top+=${topOffset}`,
+    start:               () => `top top+=${getTopOffset()}`,
     end:                 () => `+=${perStep() * (total - 1)}`,
     scrub:               0.25,
     anticipatePin:       1,

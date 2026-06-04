@@ -109,13 +109,35 @@ trait UpSites_Cards_Carousel_Controls {
 		$this->add_control(
 			'scroll_top_offset',
 			[
-				'label'       => __( 'Offset do topo (px)', 'upsites-addons' ),
-				'description' => __( 'Use para compensar um header em sticky. O scroll inicia X px abaixo do topo da viewport.', 'upsites-addons' ),
+				'label'       => __( 'Offset do topo — Desktop (px)', 'upsites-addons' ),
+				'description' => __( 'Compensar header sticky. O scroll inicia X px abaixo do topo da viewport.', 'upsites-addons' ),
 				'type'        => Controls_Manager::SLIDER,
 				'size_units'  => [ 'px' ],
 				'range'       => [ 'px' => [ 'min' => 0, 'max' => 300 ] ],
 				'default'     => [ 'unit' => 'px', 'size' => 0 ],
 				'separator'   => 'before',
+			]
+		);
+
+		$this->add_control(
+			'scroll_top_offset_tablet',
+			[
+				'label'      => __( 'Offset do topo — Tablet (px)', 'upsites-addons' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 300 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 0 ],
+			]
+		);
+
+		$this->add_control(
+			'scroll_top_offset_mobile',
+			[
+				'label'      => __( 'Offset do topo — Mobile (px)', 'upsites-addons' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 300 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 0 ],
 			]
 		);
 
@@ -130,29 +152,33 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'card_height',
 			[
-				'label'      => __( 'Altura do card', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 300, 'max' => 900, 'step' => 10 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 580 ],
-				'selectors'  => [
+				'label'          => __( 'Altura do card', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 300, 'max' => 1000, 'step' => 10 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 580 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 402 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 602 ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'card_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 30 ],
-				'selectors'  => [
+				'label'          => __( 'Border Radius', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 30 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 30 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 30 ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
 			]
@@ -225,23 +251,19 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'card_padding',
 			[
-				'label'      => __( 'Padding interno', 'upsites-addons' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px' ],
-				'default'    => [
-					'top'    => '52',
-					'right'  => '52',
-					'bottom' => '52',
-					'left'   => '52',
-					'unit'   => 'px',
-				],
-				'selectors'  => [
+				'label'          => __( 'Padding interno', 'upsites-addons' ),
+				'type'           => Controls_Manager::DIMENSIONS,
+				'size_units'     => [ 'px' ],
+				'default'        => [ 'top' => '52', 'right' => '52', 'bottom' => '52', 'left' => '52', 'unit' => 'px' ],
+				'tablet_default' => [ 'top' => '32', 'right' => '32', 'bottom' => '32', 'left' => '32', 'unit' => 'px' ],
+				'mobile_default' => [ 'top' => '20', 'right' => '20', 'bottom' => '0',  'left' => '20', 'unit' => 'px' ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card__left' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
-				'separator'  => 'before',
+				'separator'      => 'before',
 			]
 		);
 
@@ -256,30 +278,35 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'icon_container_size',
 			[
-				'label'      => __( 'Tamanho do container', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 32, 'max' => 120 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 72 ],
-				'selectors'  => [
+				'label'          => __( 'Tamanho do container', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 32, 'max' => 120 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 72 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 56 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 48 ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card__icon-wrap' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'icon_size',
 			[
-				'label'      => __( 'Tamanho do ícone', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 16, 'max' => 80 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 32 ],
-				'selectors'  => [
-					'{{WRAPPER}} .upsites-cc-card__icon-wrap img' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				'label'          => __( 'Tamanho do ícone', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 12, 'max' => 80 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 32 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 24 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 21 ],
+				'selectors'      => [
+					'{{WRAPPER}} .upsites-cc-card__icon-wrap img'         => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .upsites-cc-card__icon-wrap--empty svg'  => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -296,15 +323,17 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'icon_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 10 ],
-				'selectors'  => [
+				'label'          => __( 'Border Radius', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 10 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 10 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 10 ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card__icon-wrap' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
 			]
@@ -387,34 +416,32 @@ trait UpSites_Cards_Carousel_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'image_border_radius',
 			[
-				'label'      => __( 'Border Radius da imagem', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 25 ],
-				'selectors'  => [
+				'label'          => __( 'Border Radius da imagem', 'upsites-addons' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 25 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 25 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 25 ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card__image-wrap' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'image_margin',
 			[
-				'label'      => __( 'Margem da área da imagem', 'upsites-addons' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px' ],
-				'default'    => [
-					'top'    => '24',
-					'right'  => '24',
-					'bottom' => '24',
-					'left'   => '0',
-					'unit'   => 'px',
-				],
-				'selectors'  => [
+				'label'          => __( 'Padding da área da imagem', 'upsites-addons' ),
+				'type'           => Controls_Manager::DIMENSIONS,
+				'size_units'     => [ 'px' ],
+				'default'        => [ 'top' => '52', 'right' => '52', 'bottom' => '52', 'left' => '0',  'unit' => 'px' ],
+				'tablet_default' => [ 'top' => '32', 'right' => '32', 'bottom' => '32', 'left' => '0',  'unit' => 'px' ],
+				'mobile_default' => [ 'top' => '0',  'right' => '20', 'bottom' => '20', 'left' => '20', 'unit' => 'px' ],
+				'selectors'      => [
 					'{{WRAPPER}} .upsites-cc-card__right' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]

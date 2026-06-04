@@ -43,9 +43,14 @@ class UpSites_Cards_Carousel_Widget extends Widget_Base {
 			return;
 		}
 
-		$top_offset = isset( $settings['scroll_top_offset']['size'] ) ? intval( $settings['scroll_top_offset']['size'] ) : 0;
+		$top_offset        = isset( $settings['scroll_top_offset']['size'] )        ? intval( $settings['scroll_top_offset']['size'] )        : 0;
+		$top_offset_tablet = isset( $settings['scroll_top_offset_tablet']['size'] ) ? intval( $settings['scroll_top_offset_tablet']['size'] ) : $top_offset;
+		$top_offset_mobile = isset( $settings['scroll_top_offset_mobile']['size'] ) ? intval( $settings['scroll_top_offset_mobile']['size'] ) : $top_offset_tablet;
 		?>
-		<div class="upsites-cards-carousel" data-top-offset="<?php echo esc_attr( $top_offset ); ?>">
+		<div class="upsites-cards-carousel"
+			data-top-offset="<?php echo esc_attr( $top_offset ); ?>"
+			data-top-offset-tablet="<?php echo esc_attr( $top_offset_tablet ); ?>"
+			data-top-offset-mobile="<?php echo esc_attr( $top_offset_mobile ); ?>">
 
 			<?php foreach ( $cards as $card ) :
 				$icon_url  = ! empty( $card['card_icon']['url'] )  ? $card['card_icon']['url']  : '';
