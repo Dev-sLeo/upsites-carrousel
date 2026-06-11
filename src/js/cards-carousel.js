@@ -61,9 +61,10 @@ function setup(container) {
         const tBury        = Math.max(0, Math.min(1, pSteps - i));
         const finalScale   = 1.0 - (total - 1 - i) * scaleStep;
         const finalOpacity = (i + 1) / total;
+        const tOpacity     = Math.max(0, Math.min(1, (tBury - 0.75) / 0.25));
         gsap.set(wrapper, {
           scale:   1 - tBury * (1 - finalScale),
-          opacity: 1 - tBury * (1 - finalOpacity),
+          opacity: 1 - tOpacity * (1 - finalOpacity),
         });
       } else {
         // Last card: scale in from one step below 1.0 (matches the card beneath it)

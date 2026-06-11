@@ -13,15 +13,18 @@ import { gsap } from 'gsap';
 		},
 
 		applyResponsive: function ( card, mobile ) {
+			var w        = window.innerWidth;
+			var bp       = w <= 767 ? 'mobile' : ( w <= 1024 ? 'tablet' : 'desktop' );
+
 			var logo = card.querySelector( '.upsites-accordion-slide__logo' );
 			if ( logo ) {
 				var logoImg  = logo.querySelector( 'img' );
-				var widthKey = mobile ? 'logoWidthMobile' : 'logoWidth';
+				var widthKey = bp === 'mobile' ? 'logoWidthMobile' : ( bp === 'tablet' ? 'logoWidthTablet' : 'logoWidth' );
 				var width    = logo.dataset[ widthKey ];
 				if ( width && logoImg ) logoImg.style.maxWidth = width + 'px';
 			}
 			var bg    = card.querySelector( '.upsites-accordion-slide__bg' );
-			var bgPos = mobile ? card.dataset.bgPosMobile : null;
+			var bgPos = bp === 'mobile' ? card.dataset.bgPosMobile : ( bp === 'tablet' ? card.dataset.bgPosTablet : null );
 			if ( bg && bgPos ) bg.style.backgroundPosition = bgPos;
 		},
 

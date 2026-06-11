@@ -88,15 +88,22 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					$bg_yu  = isset( $slide['slide_bg_pos_y']['unit'] )        ? $slide['slide_bg_pos_y']['unit']        : '%';
 					$bg_pos = $bg_x . $bg_xu . ' ' . $bg_y . $bg_yu;
 
-					$mb_x          = isset( $slide['slide_bg_pos_x_mobile']['size'] ) ? $slide['slide_bg_pos_x_mobile']['size'] : 50;
-					$mb_xu         = isset( $slide['slide_bg_pos_x_mobile']['unit'] ) ? $slide['slide_bg_pos_x_mobile']['unit'] : '%';
-					$mb_y          = isset( $slide['slide_bg_pos_y_mobile']['size'] ) ? $slide['slide_bg_pos_y_mobile']['size'] : 50;
-					$mb_yu         = isset( $slide['slide_bg_pos_y_mobile']['unit'] ) ? $slide['slide_bg_pos_y_mobile']['unit'] : '%';
+					$tb_x          = isset( $slide['slide_bg_pos_x_tablet']['size'] ) ? $slide['slide_bg_pos_x_tablet']['size'] : $bg_x;
+					$tb_xu         = isset( $slide['slide_bg_pos_x_tablet']['unit'] ) ? $slide['slide_bg_pos_x_tablet']['unit'] : $bg_xu;
+					$tb_y          = isset( $slide['slide_bg_pos_y_tablet']['size'] ) ? $slide['slide_bg_pos_y_tablet']['size'] : $bg_y;
+					$tb_yu         = isset( $slide['slide_bg_pos_y_tablet']['unit'] ) ? $slide['slide_bg_pos_y_tablet']['unit'] : $bg_yu;
+					$bg_pos_tablet = $tb_x . $tb_xu . ' ' . $tb_y . $tb_yu;
+
+					$mb_x          = isset( $slide['slide_bg_pos_x_mobile']['size'] ) ? $slide['slide_bg_pos_x_mobile']['size'] : $tb_x;
+					$mb_xu         = isset( $slide['slide_bg_pos_x_mobile']['unit'] ) ? $slide['slide_bg_pos_x_mobile']['unit'] : $tb_xu;
+					$mb_y          = isset( $slide['slide_bg_pos_y_mobile']['size'] ) ? $slide['slide_bg_pos_y_mobile']['size'] : $tb_y;
+					$mb_yu         = isset( $slide['slide_bg_pos_y_mobile']['unit'] ) ? $slide['slide_bg_pos_y_mobile']['unit'] : $tb_yu;
 					$bg_pos_mobile = $mb_x . $mb_xu . ' ' . $mb_y . $mb_yu;
 
 					$overlay_color = ! empty( $slide['overlay_color'] ) ? $slide['overlay_color'] : 'rgba(77,45,120,0.7)';
 					$logo_width    = ! empty( $slide['slide_logo_width']['size'] )        ? intval( $slide['slide_logo_width']['size'] )        : 160;
-					$logo_width_mb = ! empty( $slide['slide_logo_width_mobile']['size'] ) ? intval( $slide['slide_logo_width_mobile']['size'] ) : 80;
+					$logo_width_tb = ! empty( $slide['slide_logo_width_tablet']['size'] ) ? intval( $slide['slide_logo_width_tablet']['size'] ) : $logo_width;
+					$logo_width_mb = ! empty( $slide['slide_logo_width_mobile']['size'] ) ? intval( $slide['slide_logo_width_mobile']['size'] ) : $logo_width_tb;
 					$link_url      = ! empty( $slide['slide_link']['url'] ) ? $slide['slide_link']['url'] : '';
 					$link_target   = ! empty( $slide['slide_link']['is_external'] ) ? '_blank' : '_self';
 					$link_nofollow = ! empty( $slide['slide_link']['nofollow'] ) ? ' rel="nofollow"' : '';
@@ -104,6 +111,7 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 				<div class="upsites-accordion-slide<?php echo esc_attr( $active_class ); ?>"
 					data-index="<?php echo esc_attr( $index ); ?>"
 					data-overlay-active="<?php echo esc_attr( $overlay_color ); ?>"
+					data-bg-pos-tablet="<?php echo esc_attr( $bg_pos_tablet ); ?>"
 					data-bg-pos-mobile="<?php echo esc_attr( $bg_pos_mobile ); ?>">
 
 					<div class="upsites-accordion-slide__bg"
@@ -131,6 +139,7 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					<?php if ( ! empty( $slide['slide_logo']['url'] ) ) : ?>
 					<div class="upsites-accordion-slide__logo"
 						data-logo-width="<?php echo esc_attr( $logo_width ); ?>"
+						data-logo-width-tablet="<?php echo esc_attr( $logo_width_tb ); ?>"
 						data-logo-width-mobile="<?php echo esc_attr( $logo_width_mb ); ?>">
 						<img src="<?php echo esc_url( $slide['slide_logo']['url'] ); ?>"
 							alt="<?php echo esc_attr( $slide['slide_logo_alt'] ?? '' ); ?>"

@@ -32,60 +32,35 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$repeater->add_control(
+		$repeater->add_responsive_control(
 			'slide_bg_pos_x',
 			[
-				'label'      => __( 'Posição X — desktop', 'upsites-addons' ),
+				'label'      => __( 'Posição X', 'upsites-addons' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%', 'px' ],
 				'range'      => [
 					'%'  => [ 'min' => 0, 'max' => 100 ],
 					'px' => [ 'min' => -1000, 'max' => 1000 ],
 				],
-				'default'    => [ 'unit' => '%', 'size' => 50 ],
+				'default'        => [ 'unit' => '%', 'size' => 50 ],
+				'tablet_default' => [ 'unit' => '%', 'size' => 50 ],
+				'mobile_default' => [ 'unit' => '%', 'size' => 50 ],
 			]
 		);
 
-		$repeater->add_control(
+		$repeater->add_responsive_control(
 			'slide_bg_pos_y',
 			[
-				'label'      => __( 'Posição Y — desktop', 'upsites-addons' ),
+				'label'      => __( 'Posição Y', 'upsites-addons' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%', 'px' ],
 				'range'      => [
 					'%'  => [ 'min' => 0, 'max' => 100 ],
 					'px' => [ 'min' => -1000, 'max' => 1000 ],
 				],
-				'default'    => [ 'unit' => '%', 'size' => 50 ],
-			]
-		);
-
-		$repeater->add_control(
-			'slide_bg_pos_x_mobile',
-			[
-				'label'      => __( 'Posição X — mobile', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ '%', 'px' ],
-				'range'      => [
-					'%'  => [ 'min' => 0, 'max' => 100 ],
-					'px' => [ 'min' => -1000, 'max' => 1000 ],
-				],
-				'default'    => [ 'unit' => '%', 'size' => 50 ],
-				'separator'  => 'before',
-			]
-		);
-
-		$repeater->add_control(
-			'slide_bg_pos_y_mobile',
-			[
-				'label'      => __( 'Posição Y — mobile', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ '%', 'px' ],
-				'range'      => [
-					'%'  => [ 'min' => 0, 'max' => 100 ],
-					'px' => [ 'min' => -1000, 'max' => 1000 ],
-				],
-				'default'    => [ 'unit' => '%', 'size' => 50 ],
+				'default'        => [ 'unit' => '%', 'size' => 50 ],
+				'tablet_default' => [ 'unit' => '%', 'size' => 50 ],
+				'mobile_default' => [ 'unit' => '%', 'size' => 50 ],
 			]
 		);
 
@@ -130,26 +105,16 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$repeater->add_control(
+		$repeater->add_responsive_control(
 			'slide_logo_width',
 			[
 				'label'      => __( 'Largura da logo', 'upsites-addons' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 20, 'max' => 300 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 160 ],
-				'condition'  => [ 'slide_logo[url]!' => '' ],
-			]
-		);
-
-		$repeater->add_control(
-			'slide_logo_width_mobile',
-			[
-				'label'      => __( 'Largura da logo (mobile)', 'upsites-addons' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 20, 'max' => 200 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 80 ],
+				'default'        => [ 'unit' => 'px', 'size' => 160 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 120 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 80 ],
 				'condition'  => [ 'slide_logo[url]!' => '' ],
 			]
 		);
@@ -230,7 +195,7 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'slider_height',
 			[
 				'label'      => __( 'Altura', 'upsites-addons' ),
@@ -240,7 +205,9 @@ trait UpSites_Accordion_Slider_Controls {
 					'px' => [ 'min' => 200, 'max' => 900, 'step' => 10 ],
 					'vh' => [ 'min' => 20,  'max' => 100 ],
 				],
-				'default'    => [ 'unit' => 'px', 'size' => 460 ],
+				'default'        => [ 'unit' => 'px', 'size' => 460 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 460 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 460 ],
 				'selectors'  => [
 					'{{WRAPPER}} .upsites-accordion-slider' => 'height: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .upsites-accordion-slide'  => 'height: {{SIZE}}{{UNIT}};',
@@ -248,28 +215,32 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'slide_border_radius',
 			[
 				'label'      => __( 'Border Radius', 'upsites-addons' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 30 ],
+				'default'        => [ 'unit' => 'px', 'size' => 30 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 30 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 30 ],
 				'selectors'  => [
 					'{{WRAPPER}} .upsites-accordion-slide' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'slide_gap',
 			[
 				'label'      => __( 'Espaço entre slides', 'upsites-addons' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 20 ],
+				'default'        => [ 'unit' => 'px', 'size' => 20 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 20 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 20 ],
 				'selectors'  => [
 					'{{WRAPPER}} .upsites-accordion-slider' => 'gap: {{SIZE}}{{UNIT}};',
 				],
