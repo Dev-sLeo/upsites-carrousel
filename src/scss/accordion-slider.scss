@@ -1,25 +1,25 @@
 // UpSites Accordion Slider
 
 // ── Variables ──────────────────────────────────────────────
-$color-overlay-start:  rgba(77, 45, 120, 0);
-$color-overlay-end:    rgba(77, 45, 120, 0.5);
+$color-overlay-start: rgba(77, 45, 120, 0);
+$color-overlay-end: rgba(77, 45, 120, 0.5);
 $color-overlay-active: rgba(77, 45, 120, 0.7);
-$color-tab-active:     #6040a5;
-$color-bg-default:     #2d1a50;
-$color-white:          #ffffff;
+$color-tab-active: #6040a5;
+$color-bg-default: #2d1a50;
+$color-white: #ffffff;
 
-$radius-slide:         30px;
-$radius-tab:           8px;
+$radius-slide: 30px;
+$radius-tab: 8px;
 
-$height-desktop:       460px;
-$height-tablet:        400px;
-$height-mobile:        344px;
+$height-desktop: 460px;
+$height-tablet: 400px;
+$height-mobile: 344px;
 
-$gap-slider:           20px;
-$gap-tabs:             8px;
+$gap-slider: 20px;
+$gap-tabs: 8px;
 
-$bp-tablet:            1024px;
-$bp-mobile:            767px;
+$bp-tablet: 1024px;
+$bp-mobile: 767px;
 
 // ── Wrapper ────────────────────────────────────────────────
 .upsites-accordion-wrapper {
@@ -84,19 +84,15 @@ $bp-mobile:            767px;
 	}
 
 	&:not(.is-active) &__overlay {
-		background: linear-gradient(
-			to top,
+		background: linear-gradient(to top,
 			var(--upsites-overlay-end, #{$color-overlay-end}) 0%,
-			var(--upsites-overlay-start, #{$color-overlay-start}) 60%
-		);
+			var(--upsites-overlay-start, #{$color-overlay-start}) 60%);
 	}
 
 	&.is-active &__overlay {
-		background: linear-gradient(
-			to bottom,
+		background: linear-gradient(to bottom,
 			var(--upsites-overlay-active, #{$color-overlay-active}) 0%,
-			rgba(77, 45, 120, 0) 80%
-		);
+			rgba(77, 45, 120, 0) 80%);
 	}
 
 	// ── Text content ──────────────────────────────────────
@@ -189,8 +185,15 @@ $bp-mobile:            767px;
 }
 
 // Desktop arrow visible, mobile arrow hidden
-.upsites-arrow-desktop { display: block; width: 22px; height: 22px; }
-.upsites-arrow-mobile  { display: none; }
+.upsites-arrow-desktop {
+	display: block;
+	width: 22px;
+	height: 22px;
+}
+
+.upsites-arrow-mobile {
+	display: none;
+}
 
 
 // ════════════════════════════════════════════════════════════
@@ -206,7 +209,6 @@ $bp-mobile:            767px;
 		justify-content: center;
 		gap: $gap-tabs;
 		margin-bottom: 16px;
-		padding: 0 20px;
 		box-sizing: border-box;
 	}
 
@@ -271,11 +273,9 @@ $bp-mobile:            767px;
 		// ── Mobile overlay: bottom-up ──────────────────────
 		.upsites-accordion-slide__overlay,
 		&.is-active .upsites-accordion-slide__overlay {
-			background: linear-gradient(
-				to top,
+			background: linear-gradient(to top,
 				var(--upsites-overlay-active, #{$color-overlay-active}) 0%,
-				rgba(77, 45, 120, 0) 60%
-			) !important;
+				rgba(77, 45, 120, 0) 60%) !important;
 		}
 
 		// ── Content ───────────────────────────────────────
@@ -313,8 +313,15 @@ $bp-mobile:            767px;
 		}
 	}
 
-	.upsites-arrow-desktop { display: none; }
-	.upsites-arrow-mobile  { display: block; width: 51px; height: 51px; }
+	.upsites-arrow-desktop {
+		display: none;
+	}
+
+	.upsites-arrow-mobile {
+		display: block;
+		width: 51px;
+		height: 51px;
+	}
 }
 
 // ════════════════════════════════════════════════════════════
