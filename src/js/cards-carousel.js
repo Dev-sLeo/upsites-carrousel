@@ -94,8 +94,9 @@ function setup(container) {
     trigger:             container,
     pin:                 container,
     start:               () => `top top+=${getTopOffset()}`,
-    end:                 () => `+=${perStep() * (total - 1)}`,
-    scrub:               0.25,
+    // extra step at the end gives reading time before the pin releases
+    end:                 () => `+=${perStep() * total}`,
+    scrub:               0.8,
     anticipatePin:       1,
     invalidateOnRefresh: true,
     onUpdate(self) {

@@ -135,10 +135,30 @@ trait UpSites_Accordion_Slider_Controls {
 		$repeater->add_control(
 			'overlay_color',
 			[
-				'label'     => __( 'Cor do Gradiente (ativo)', 'upsites-addons' ),
+				'label'     => __( 'Cor do Gradiente (ativo) — Desktop', 'upsites-addons' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(77,45,120,0.7)',
 				'separator' => 'before',
+			]
+		);
+
+		$repeater->add_control(
+			'overlay_color_tablet',
+			[
+				'label'       => __( 'Cor do Gradiente (ativo) — Tablet', 'upsites-addons' ),
+				'type'        => Controls_Manager::COLOR,
+				'default'     => '',
+				'description' => __( 'Deixe em branco para usar a cor do Desktop.', 'upsites-addons' ),
+			]
+		);
+
+		$repeater->add_control(
+			'overlay_color_mobile',
+			[
+				'label'       => __( 'Cor do Gradiente (ativo) — Mobile', 'upsites-addons' ),
+				'type'        => Controls_Manager::COLOR,
+				'default'     => '',
+				'description' => __( 'Deixe em branco para usar a cor do Tablet/Desktop.', 'upsites-addons' ),
 			]
 		);
 
@@ -282,7 +302,7 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'title_color',
 			[
 				'label'     => __( 'Cor do Título', 'upsites-addons' ),
@@ -303,14 +323,14 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'description_color',
 			[
 				'label'     => __( 'Cor da Descrição', 'upsites-addons' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .upsites-accordion-slide__description' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .upsites-accordion-slide__description, {{WRAPPER}} .upsites-accordion-slide__description-mobile' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -320,7 +340,7 @@ trait UpSites_Accordion_Slider_Controls {
 			[
 				'name'     => 'description_typography',
 				'label'    => __( 'Tipografia da Descrição', 'upsites-addons' ),
-				'selector' => '{{WRAPPER}} .upsites-accordion-slide__description',
+				'selector' => '{{WRAPPER}} .upsites-accordion-slide__description, {{WRAPPER}} .upsites-accordion-slide__description-mobile',
 			]
 		);
 
@@ -335,21 +355,27 @@ trait UpSites_Accordion_Slider_Controls {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'overlay_inactive_start',
 			[
-				'label'   => __( 'Gradiente Inativo (início)', 'upsites-addons' ),
-				'type'    => Controls_Manager::COLOR,
-				'default' => 'rgba(77,45,120,0)',
+				'label'     => __( 'Gradiente Inativo (início)', 'upsites-addons' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(77,45,120,0)',
+				'selectors' => [
+					'{{WRAPPER}}' => '--upsites-overlay-start: {{VALUE}};',
+				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'overlay_inactive_end',
 			[
-				'label'   => __( 'Gradiente Inativo (fim)', 'upsites-addons' ),
-				'type'    => Controls_Manager::COLOR,
-				'default' => 'rgba(77,45,120,0.5)',
+				'label'     => __( 'Gradiente Inativo (fim)', 'upsites-addons' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(77,45,120,0.5)',
+				'selectors' => [
+					'{{WRAPPER}}' => '--upsites-overlay-end: {{VALUE}};',
+				],
 			]
 		);
 

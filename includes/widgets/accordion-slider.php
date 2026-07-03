@@ -40,8 +40,6 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 		$slides         = $settings['slides'];
 		$default_active = intval( $settings['default_active'] );
 
-		$overlay_start = ! empty( $settings['overlay_inactive_start'] ) ? $settings['overlay_inactive_start'] : 'rgba(77,45,120,0)';
-		$overlay_end   = ! empty( $settings['overlay_inactive_end'] )   ? $settings['overlay_inactive_end']   : 'rgba(77,45,120,0.5)';
 		$grayscale     = ! empty( $settings['inactive_grayscale'] ) && 'yes' === $settings['inactive_grayscale'];
 
 		if ( empty( $slides ) ) {
@@ -49,9 +47,7 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 		}
 		?>
 		<div class="upsites-accordion-wrapper<?php echo $grayscale ? ' has-grayscale' : ''; ?>"
-			data-default-active="<?php echo esc_attr( $default_active ); ?>"
-			data-overlay-start="<?php echo esc_attr( $overlay_start ); ?>"
-			data-overlay-end="<?php echo esc_attr( $overlay_end ); ?>">
+			data-default-active="<?php echo esc_attr( $default_active ); ?>">
 
 			<?php /* ── Mobile tab bar ── */ ?>
 			<div class="upsites-accordion-tabs">
@@ -100,7 +96,9 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					$mb_yu         = isset( $slide['slide_bg_pos_y_mobile']['unit'] ) ? $slide['slide_bg_pos_y_mobile']['unit'] : $tb_yu;
 					$bg_pos_mobile = $mb_x . $mb_xu . ' ' . $mb_y . $mb_yu;
 
-					$overlay_color = ! empty( $slide['overlay_color'] ) ? $slide['overlay_color'] : 'rgba(77,45,120,0.7)';
+					$overlay_color        = ! empty( $slide['overlay_color'] ) ? $slide['overlay_color'] : 'rgba(77,45,120,0.7)';
+					$overlay_color_tablet = ! empty( $slide['overlay_color_tablet'] ) ? $slide['overlay_color_tablet'] : $overlay_color;
+					$overlay_color_mobile = ! empty( $slide['overlay_color_mobile'] ) ? $slide['overlay_color_mobile'] : $overlay_color_tablet;
 					$logo_width    = ! empty( $slide['slide_logo_width']['size'] )        ? intval( $slide['slide_logo_width']['size'] )        : 160;
 					$logo_width_tb = ! empty( $slide['slide_logo_width_tablet']['size'] ) ? intval( $slide['slide_logo_width_tablet']['size'] ) : $logo_width;
 					$logo_width_mb = ! empty( $slide['slide_logo_width_mobile']['size'] ) ? intval( $slide['slide_logo_width_mobile']['size'] ) : $logo_width_tb;
@@ -111,6 +109,8 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 				<div class="upsites-accordion-slide<?php echo esc_attr( $active_class ); ?>"
 					data-index="<?php echo esc_attr( $index ); ?>"
 					data-overlay-active="<?php echo esc_attr( $overlay_color ); ?>"
+					data-overlay-active-tablet="<?php echo esc_attr( $overlay_color_tablet ); ?>"
+					data-overlay-active-mobile="<?php echo esc_attr( $overlay_color_mobile ); ?>"
 					data-bg-pos-tablet="<?php echo esc_attr( $bg_pos_tablet ); ?>"
 					data-bg-pos-mobile="<?php echo esc_attr( $bg_pos_mobile ); ?>">
 
@@ -170,6 +170,12 @@ class UpSites_Accordion_Slider_Widget extends Widget_Base {
 					</div>
 
 				</div>
+
+					<?php if ( ! empty( $slide['slide_description'] ) ) : ?>
+					<p class="upsites-accordion-slide__description-mobile">
+						<?php echo wp_kses_post( $slide['slide_description'] ); ?>
+					</p>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 

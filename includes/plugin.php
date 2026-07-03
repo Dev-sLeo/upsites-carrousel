@@ -46,6 +46,9 @@ final class UpSites_Addons {
 
 		require_once UPSITES_ADDONS_PATH . 'includes/widgets/cards-carousel.php';
 		$widgets_manager->register( new \UpSites_Cards_Carousel_Widget() );
+
+		require_once UPSITES_ADDONS_PATH . 'includes/widgets/mega-menu-nav.php';
+		$widgets_manager->register( new \UpSites_Mega_Menu_Nav_Widget() );
 	}
 
 	public function enqueue_styles() {
@@ -58,6 +61,12 @@ final class UpSites_Addons {
 		wp_enqueue_style(
 			'upsites-cards-carousel',
 			UPSITES_ADDONS_URL . 'assets/css/cards-carousel.css',
+			[],
+			UPSITES_ADDONS_VERSION
+		);
+		wp_enqueue_style(
+			'upsites-mega-menu-nav',
+			UPSITES_ADDONS_URL . 'assets/css/mega-menu-nav.css',
 			[],
 			UPSITES_ADDONS_VERSION
 		);
@@ -74,6 +83,13 @@ final class UpSites_Addons {
 		wp_register_script(
 			'upsites-cards-carousel',
 			UPSITES_ADDONS_URL . 'assets/js/cards-carousel.js',
+			[],
+			UPSITES_ADDONS_VERSION,
+			true
+		);
+		wp_register_script(
+			'upsites-mega-menu-nav',
+			UPSITES_ADDONS_URL . 'assets/js/mega-menu-nav.js',
 			[],
 			UPSITES_ADDONS_VERSION,
 			true

@@ -26,6 +26,9 @@ import { gsap } from 'gsap';
 			var bg    = card.querySelector( '.upsites-accordion-slide__bg' );
 			var bgPos = bp === 'mobile' ? card.dataset.bgPosMobile : ( bp === 'tablet' ? card.dataset.bgPosTablet : null );
 			if ( bg && bgPos ) bg.style.backgroundPosition = bgPos;
+
+			var overlayActive = bp === 'mobile' ? card.dataset.overlayActiveMobile : ( bp === 'tablet' ? card.dataset.overlayActiveTablet : card.dataset.overlayActive );
+			if ( overlayActive ) card.style.setProperty( '--upsites-overlay-active', overlayActive );
 		},
 
 		computeWidths: function ( slider, n, gap ) {
@@ -47,6 +50,8 @@ import { gsap } from 'gsap';
 			cards.forEach( function ( card, i ) {
 				var bg   = card.querySelector( '.upsites-accordion-slide__bg' );
 				var logo = card.querySelector( '.upsites-accordion-slide__logo' );
+
+				AccordionSlider.applyResponsive( card );
 
 				if ( i === defaultActive ) {
 					gsap.set( card, { width: widthAberto } );
@@ -86,7 +91,7 @@ import { gsap } from 'gsap';
 						gsap.to( prevCard, { width: widthFechado, duration: 0.6, ease: 'power2.out' } );
 
 						gsap.to( prevCard.querySelector( '.upsites-accordion-slide__content' ), {
-							opacity: 0, duration: 0.15,
+							opacity: 0, duration: 0.35, ease: 'power2.out',
 							onComplete: function () {
 								gsap.set( prevCard.querySelector( '.upsites-accordion-slide__content' ), { display: 'none' } );
 							},
@@ -115,7 +120,7 @@ import { gsap } from 'gsap';
 
 					var content = card.querySelector( '.upsites-accordion-slide__content' );
 					gsap.set( content, { display: 'flex', opacity: 0, y: 16 } );
-					gsap.to( content,  { opacity: 1, y: 0, duration: 0.4, delay: 0.2, ease: 'power2.out' } );
+					gsap.to( content,  { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' } );
 
 					var arrow = card.querySelector( '.upsites-accordion-slide__arrow' );
 					gsap.killTweensOf( arrow );
@@ -130,6 +135,17 @@ import { gsap } from 'gsap';
 		},
 
 		// ── Mobile tab bar ───────────────────────────────────
+		getDescMobile: function ( card ) {
+			var el = card.nextElementSibling;
+			return ( el && el.classList.contains( 'upsites-accordion-slide__description-mobile' ) ) ? el : null;
+		},
+
+		// description-mobile only renders below the card on smartphone;
+		// on tablet the inline __description stays visible inside the card.
+		isSmartphone: function () {
+			return window.innerWidth <= 767;
+		},
+
 		setupMobile: function ( wrapper, cards, tabs, defaultActive ) {
 			var currentIndex = defaultActive;
 
@@ -140,12 +156,14 @@ import { gsap } from 'gsap';
 				var nextCard    = cards[ nextIndex ];
 				var prevContent = prevCard.querySelector( '.upsites-accordion-slide__content' );
 				var prevArrow   = prevCard.querySelector( '.upsites-accordion-slide__arrow' );
+				var prevDesc    = AccordionSlider.getDescMobile( prevCard );
 
-				gsap.to( [ prevContent, prevArrow ], {
-					opacity: 0, y: 20, duration: 0.22, ease: 'power2.in',
+				gsap.to( [ prevContent, prevArrow, prevDesc ].filter( Boolean ), {
+					opacity: 0, y: 20, duration: 0.35, ease: 'power2.out',
 					onComplete: function () {
 						prevCard.classList.remove( 'is-active' );
 						tabs[ currentIndex ].classList.remove( 'is-active' );
+						if ( prevDesc ) gsap.set( prevDesc, { display: 'none' } );
 
 						currentIndex = nextIndex;
 
@@ -155,19 +173,26 @@ import { gsap } from 'gsap';
 
 						var nextContent = nextCard.querySelector( '.upsites-accordion-slide__content' );
 						var nextArrow   = nextCard.querySelector( '.upsites-accordion-slide__arrow' );
+						var nextDesc    = AccordionSlider.getDescMobile( nextCard );
+
+						if ( nextDesc && AccordionSlider.isSmartphone() ) gsap.set( nextDesc, { display: 'block' } );
 
 						gsap.fromTo(
-							[ nextContent, nextArrow ],
+							[ nextContent, nextArrow, nextDesc ].filter( Boolean ),
 							{ opacity: 0, y: -20 },
-							{ opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }
+							{ opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
 						);
 					},
 				} );
 			}
 
 			cards.forEach( function ( card, i ) {
-				card.classList.toggle( 'is-active', i === currentIndex );
+				var isActive = i === currentIndex;
+				card.classList.toggle( 'is-active', isActive );
 				AccordionSlider.applyResponsive( card, true );
+
+				var desc = AccordionSlider.getDescMobile( card );
+				if ( desc ) gsap.set( desc, { display: ( isActive && AccordionSlider.isSmartphone() ) ? 'block' : 'none', opacity: isActive ? 1 : 0 } );
 			} );
 			tabs.forEach( function ( tab, i ) {
 				tab.classList.toggle( 'is-active', i === currentIndex );
@@ -175,7 +200,8 @@ import { gsap } from 'gsap';
 
 			var initContent = cards[ currentIndex ].querySelector( '.upsites-accordion-slide__content' );
 			var initArrow   = cards[ currentIndex ].querySelector( '.upsites-accordion-slide__arrow' );
-			gsap.set( [ initContent, initArrow ], { opacity: 1, y: 0 } );
+			var initDesc    = AccordionSlider.getDescMobile( cards[ currentIndex ] );
+			gsap.set( [ initContent, initArrow, initDesc ].filter( Boolean ), { opacity: 1, y: 0 } );
 
 			tabs.forEach( function ( tab ) {
 				tab.addEventListener( 'click', function () {
@@ -191,14 +217,8 @@ import { gsap } from 'gsap';
 			var cards         = Array.from( slider.querySelectorAll( '.upsites-accordion-slide' ) );
 			var tabs          = Array.from( wrapper.querySelectorAll( '.upsites-accordion-tab' ) );
 
-			var overlayStart = $wrapper.data( 'overlay-start' );
-			var overlayEnd   = $wrapper.data( 'overlay-end' );
-			if ( overlayStart ) wrapper.style.setProperty( '--upsites-overlay-start', overlayStart );
-			if ( overlayEnd )   wrapper.style.setProperty( '--upsites-overlay-end',   overlayEnd );
-
 			cards.forEach( function ( card ) {
-				var activeColor = card.dataset.overlayActive;
-				if ( activeColor ) card.style.setProperty( '--upsites-overlay-active', activeColor );
+				AccordionSlider.applyResponsive( card );
 			} );
 
 			var isMobile = window.matchMedia( '(max-width: 1024px)' );
@@ -218,6 +238,8 @@ import { gsap } from 'gsap';
 					gsap.set( card.querySelector( '.upsites-accordion-slide__arrow' ),   { clearProps: 'all' } );
 					var logo = card.querySelector( '.upsites-accordion-slide__logo' );
 					if ( logo ) gsap.set( logo, { clearProps: 'all' } );
+					var desc = AccordionSlider.getDescMobile( card );
+					if ( desc ) gsap.set( desc, { clearProps: 'all' } );
 					card.classList.remove( 'is-active' );
 				} );
 				tabs.forEach( function ( tab ) { tab.classList.remove( 'is-active' ); } );

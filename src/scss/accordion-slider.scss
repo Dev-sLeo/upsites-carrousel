@@ -130,6 +130,15 @@ $bp-mobile: 767px;
 		color: $color-white;
 	}
 
+	// ── Description shown below the card on smartphone ─────
+	&__description-mobile {
+		display: none;
+		font-size: 15px;
+		font-weight: 400;
+		line-height: 1.5;
+		margin: 16px 0 0;
+	}
+
 	// ── Logo (desktop) ────────────────────────────────────
 	&__logo {
 		position: absolute;
