@@ -264,6 +264,14 @@ class UpSites_Mega_Menu_Nav_Widget extends Widget_Base
 			'text'    => ! empty($settings['panel_footer_text']) ? $settings['panel_footer_text'] : '',
 			'url'     => ! empty($settings['panel_footer_url']['url']) ? $settings['panel_footer_url']['url'] : '#',
 		];
+
+		// Mobile-only chrome (logo, search, CTAs) — the desktop bar never
+		// reads these settings, it stays menu-only.
+		$mobile_logo_url   = ! empty($settings['mobile_logo']['url']) ? $settings['mobile_logo']['url'] : '';
+		$mobile_logo_link  = ! empty($settings['mobile_logo_link']['url']) ? $settings['mobile_logo_link']['url'] : home_url('/');
+		$mobile_show_search = ! empty($settings['mobile_show_search']) && 'yes' === $settings['mobile_show_search'];
+		$mobile_cta_sec_url = ! empty($settings['mobile_cta_secondary_url']['url']) ? $settings['mobile_cta_secondary_url']['url'] : '#';
+		$mobile_cta_pri_url = ! empty($settings['mobile_cta_primary_url']['url']) ? $settings['mobile_cta_primary_url']['url'] : '#';
 		?>
 		<div class="upsites-mega-nav">
 
@@ -289,15 +297,39 @@ class UpSites_Mega_Menu_Nav_Widget extends Widget_Base
 						</li>
 					<?php endforeach; ?>
 				</ul>
-
-				<button type="button" class="upsites-mega-nav__burger" aria-label="<?php esc_attr_e('Abrir menu', 'upsites-addons'); ?>" aria-expanded="false">
-					<span></span><span></span><span></span>
-				</button>
 			</div>
+
+			<?php /* Hamburger trigger — a sibling of the desktop bar (not inside
+			it), since .upsites-mega-nav__desktop is display:none on mobile and
+			would otherwise hide the only control that can open the off-canvas. */ ?>
+			<button type="button" class="upsites-mega-nav__burger" aria-label="<?php esc_attr_e('Abrir menu', 'upsites-addons'); ?>" aria-expanded="false">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<mask id="upsites-mega-nav-burger-mask" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+						<rect width="24" height="24" fill="#D9D9D9"/>
+					</mask>
+					<g mask="url(#upsites-mega-nav-burger-mask)">
+						<path d="M6 21C5.44772 21 5 20.5523 5 20C5 19.4477 5.44772 19 6 19H22C22.5523 19 23 19.4477 23 20C23 20.5523 22.5523 21 22 21H6Z" fill="currentColor"/>
+						<path d="M22 11H2C1.44772 11 1 11.4477 1 12C1 12.5523 1.44772 13 2 13H22C22.5523 13 23 12.5523 23 12C23 11.4477 22.5523 11 22 11Z" fill="currentColor"/>
+						<path d="M22 3H4C3.44772 3 3 3.44772 3 4C3 4.55228 3.44772 5 4 5H22C22.5523 5 23 4.55228 23 4C23 3.44772 22.5523 3 22 3Z" fill="currentColor"/>
+					</g>
+				</svg>
+			</button>
 
 			<?php /* ── Mobile off-canvas ── */ ?>
 			<div class="upsites-mega-nav__mobile" aria-hidden="true">
 				<div class="upsites-mega-nav__mobile-header">
+					<a class="upsites-mega-nav__mobile-logo" href="<?php echo esc_url($mobile_logo_link); ?>">
+						<?php if ($mobile_logo_url) : ?>
+							<img src="<?php echo esc_url($mobile_logo_url); ?>" alt="<?php bloginfo('name'); ?>">
+						<?php endif; ?>
+					</a>
+					<?php /* Replaces the logo (hidden via .upsites-mega-nav__mobile.is-level2) whenever
+					a level-2 screen is open, so "Voltar" sits where the header always is — instead of a
+					second row stacked below a persistent logo header. */ ?>
+					<button type="button" class="upsites-mega-nav__mobile-header-back" data-back>
+						<span class="upsites-mega-nav__chevron upsites-mega-nav__chevron--back" aria-hidden="true"></span>
+						<?php esc_html_e('Voltar', 'upsites-addons'); ?>
+					</button>
 					<button type="button" class="upsites-mega-nav__close" aria-label="<?php esc_attr_e('Fechar menu', 'upsites-addons'); ?>">&times;</button>
 				</div>
 
@@ -305,6 +337,12 @@ class UpSites_Mega_Menu_Nav_Widget extends Widget_Base
 
 					<?php /* Level 1 */ ?>
 					<div class="upsites-mega-nav__screen upsites-mega-nav__screen--level1 is-active" data-level="1">
+						<?php if ($mobile_show_search) : ?>
+							<form class="upsites-mega-nav__mobile-search" action="<?php echo esc_url($settings['mobile_search_action_url']['url']); ?>" method="get">
+								<input type="search" name="s" placeholder="<?php echo esc_attr($settings['mobile_search_placeholder']); ?>">
+							</form>
+						<?php endif; ?>
+
 						<ul class="upsites-mega-nav__mobile-list">
 							<?php foreach ($nav_items as $nav_index => $item) :
 								$has_submenu = ! empty($item['has_submenu']) && 'yes' === $item['has_submenu'];
@@ -326,6 +364,15 @@ class UpSites_Mega_Menu_Nav_Widget extends Widget_Base
 							<?php endforeach; ?>
 
 						</ul>
+
+						<div class="upsites-mega-nav__mobile-ctas">
+							<a class="upsites-mega-nav__cta upsites-mega-nav__cta--secondary" href="<?php echo esc_url($mobile_cta_sec_url); ?>">
+								<?php echo esc_html($settings['mobile_cta_secondary_text']); ?>
+							</a>
+							<a class="upsites-mega-nav__cta upsites-mega-nav__cta--primary" href="<?php echo esc_url($mobile_cta_pri_url); ?>">
+								<?php echo esc_html($settings['mobile_cta_primary_text']); ?>
+							</a>
+						</div>
 					</div>
 
 					<?php /* Level 2 — one screen per nav item with a submenu */ ?>
@@ -336,43 +383,67 @@ class UpSites_Mega_Menu_Nav_Widget extends Widget_Base
 							continue;
 						}
 					?>
+						<?php $has_mobile_tabs = count($tabs) > 1; ?>
 						<div class="upsites-mega-nav__screen upsites-mega-nav__screen--level2" data-level="2" data-group="<?php echo esc_attr($nav_index); ?>">
-							<button type="button" class="upsites-mega-nav__back" data-back>
-								<span class="upsites-mega-nav__chevron upsites-mega-nav__chevron--back" aria-hidden="true"></span>
-								<?php esc_html_e('Voltar', 'upsites-addons'); ?>
-							</button>
-
-							<?php foreach ($tabs as $tab_position => $tab) : ?>
-								<?php if ('columns_promo' === $tab['submenu_style']) : ?>
-									<?php $this->render_promo($tab); ?>
-								<?php endif; ?>
-
-								<div class="upsites-mega-nav__mobile-accordion-group">
-									<?php if (! empty($tab['tab_title'])) : ?>
-										<div class="upsites-mega-nav__mobile-group-label"><?php echo esc_html($tab['tab_title']); ?></div>
-									<?php endif; ?>
-									<?php foreach ($tab['_columns'] as $col_index => $column) :
-										$panel_id = 'mm-' . $nav_index . '-' . $tab_position . '-' . $col_index;
+							<?php if ($has_mobile_tabs) : ?>
+								<div class="upsites-mega-nav__mobile-tabs" role="tablist">
+									<?php foreach ($tabs as $tab_position => $tab) :
+										$is_active = (0 === $tab_position);
 									?>
-										<div class="upsites-mega-nav__accordion">
-											<button type="button" class="upsites-mega-nav__accordion-trigger" aria-expanded="false" aria-controls="<?php echo esc_attr($panel_id); ?>">
-												<?php echo esc_html($column['column_title']); ?>
-												<span class="upsites-mega-nav__chevron" aria-hidden="true"></span>
-											</button>
-											<div class="upsites-mega-nav__accordion-panel" id="<?php echo esc_attr($panel_id); ?>">
-												<?php foreach ($column['_links'] as $link) :
-													$url = ! empty($link['link_url']['url']) ? $link['link_url']['url'] : '#';
-												?>
-													<a class="upsites-mega-nav__link" href="<?php echo esc_url($url); ?>">
-														<span class="upsites-mega-nav__link-icon" style="background-color:<?php echo esc_attr($link['link_icon_bg_color']); ?>">
-															<?php $this->render_icon($link['link_icon'], $link['link_label']); ?>
-														</span>
-														<span class="upsites-mega-nav__link-label"><?php echo esc_html($link['link_label']); ?></span>
-													</a>
-												<?php endforeach; ?>
-											</div>
-										</div>
+										<button type="button"
+											class="upsites-mega-nav__mobile-tab<?php echo $is_active ? ' is-active' : ''; ?>"
+											role="tab"
+											aria-selected="<?php echo $is_active ? 'true' : 'false'; ?>"
+											data-mobile-tab="<?php echo esc_attr($tab_position); ?>">
+											<span class="upsites-mega-nav__mobile-tab-text">
+												<span class="upsites-mega-nav__mobile-tab-eyebrow"><?php echo esc_html($item['item_label']); ?></span>
+												<span class="upsites-mega-nav__mobile-tab-title"><?php echo esc_html($tab['tab_title']); ?></span>
+											</span>
+										</button>
 									<?php endforeach; ?>
+								</div>
+							<?php endif; ?>
+
+							<?php foreach ($tabs as $tab_position => $tab) :
+								$is_active = (0 === $tab_position);
+							?>
+								<div class="upsites-mega-nav__mobile-tabpanel<?php echo $is_active ? ' is-active' : ''; ?>" role="tabpanel" data-mobile-tabpanel="<?php echo esc_attr($tab_position); ?>">
+									<?php if ('columns_promo' === $tab['submenu_style']) : ?>
+										<?php $this->render_promo($tab); ?>
+									<?php endif; ?>
+
+									<div class="upsites-mega-nav__mobile-accordion-group">
+										<?php if (! $has_mobile_tabs && ! empty($tab['tab_title'])) : ?>
+											<div class="upsites-mega-nav__mobile-group-label"><?php echo esc_html($tab['tab_title']); ?></div>
+										<?php endif; ?>
+										<?php foreach ($tab['_columns'] as $col_index => $column) :
+											$panel_id = 'mm-' . $nav_index . '-' . $tab_position . '-' . $col_index;
+										?>
+											<div class="upsites-mega-nav__accordion">
+												<button type="button" class="upsites-mega-nav__accordion-trigger" aria-expanded="false" aria-controls="<?php echo esc_attr($panel_id); ?>">
+													<?php echo esc_html($column['column_title']); ?>
+													<span class="upsites-mega-nav__chevron" aria-hidden="true"></span>
+												</button>
+												<div class="upsites-mega-nav__accordion-panel" id="<?php echo esc_attr($panel_id); ?>">
+													<?php foreach ($column['_links'] as $link) :
+														$url = ! empty($link['link_url']['url']) ? $link['link_url']['url'] : '#';
+													?>
+														<a class="upsites-mega-nav__link" href="<?php echo esc_url($url); ?>">
+															<span class="upsites-mega-nav__link-icon" style="background-color:<?php echo esc_attr($link['link_icon_bg_color']); ?>">
+																<?php $this->render_icon($link['link_icon'], $link['link_label']); ?>
+															</span>
+															<span class="upsites-mega-nav__link-text">
+																<span class="upsites-mega-nav__link-label"><?php echo esc_html($link['link_label']); ?></span>
+																<?php if (! empty($link['link_description'])) : ?>
+																	<span class="upsites-mega-nav__link-desc"><?php echo esc_html($link['link_description']); ?></span>
+																<?php endif; ?>
+															</span>
+														</a>
+													<?php endforeach; ?>
+												</div>
+											</div>
+										<?php endforeach; ?>
+									</div>
 								</div>
 							<?php endforeach; ?>
 							<?php $this->render_panel_footer(); ?>

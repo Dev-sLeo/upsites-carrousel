@@ -37,7 +37,7 @@ $desc-size:               24px;
 $desc-size-tablet:        16px;
 
 // Mobile-first breakpoints
-$bp-tablet:               768px;
+$bp-tablet:               680px;
 $bp-desktop:              1025px;
 
 // ── Wrapper — height and position set by JS ───────────────
@@ -163,7 +163,7 @@ $bp-desktop:              1025px;
 }
 
 // ════════════════════════════════════════════════════════════
-// TABLET  ≥ 768px
+// TABLET  680px – 1024px
 // ════════════════════════════════════════════════════════════
 @media (min-width: $bp-tablet) {
 	.upsites-cc-card {

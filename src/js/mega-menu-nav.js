@@ -146,10 +146,20 @@ function setupMobile(root) {
   if (!mobile) return;
 
   const level1 = mobile.querySelector('.upsites-mega-nav__screen[data-level="1"]');
+  let lockedScrollY = 0;
 
+  // overflow:hidden on body alone doesn't stop touch/rubber-band scrolling
+  // of the page behind the menu on mobile Safari. Pinning body in place with
+  // position:fixed (and restoring the scroll position on close) blocks it
+  // reliably, while .upsites-mega-nav__mobile-screens keeps its own scroll.
   const openOffCanvas = () => {
     mobile.classList.add("is-open");
     mobile.setAttribute("aria-hidden", "false");
+    lockedScrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
     document.body.style.overflow = "hidden";
     if (burger) burger.setAttribute("aria-expanded", "true");
   };
@@ -157,7 +167,12 @@ function setupMobile(root) {
   const closeOffCanvas = () => {
     mobile.classList.remove("is-open");
     mobile.setAttribute("aria-hidden", "true");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
     document.body.style.overflow = "";
+    window.scrollTo(0, lockedScrollY);
     if (burger) burger.setAttribute("aria-expanded", "false");
     goToLevel1();
   };
@@ -165,6 +180,8 @@ function setupMobile(root) {
   const goToLevel1 = () => {
     mobile.querySelectorAll(".upsites-mega-nav__screen").forEach((s) => s.classList.remove("is-active"));
     if (level1) level1.classList.add("is-active");
+    // Swaps the header back to the logo (see .upsites-mega-nav__mobile.is-level2 in CSS).
+    mobile.classList.remove("is-level2");
   };
 
   const goToGroup = (groupId) => {
@@ -173,6 +190,9 @@ function setupMobile(root) {
       `.upsites-mega-nav__screen--level2[data-group="${CSS.escape(groupId)}"]`
     );
     if (target) target.classList.add("is-active");
+    // Swaps the header's logo for the "Voltar" control so it reads as one
+    // continuous header row instead of a second row below a fixed logo.
+    mobile.classList.add("is-level2");
   };
 
   if (burger) burger.addEventListener("click", openOffCanvas);
@@ -184,6 +204,31 @@ function setupMobile(root) {
 
   mobile.querySelectorAll("[data-back]").forEach((btn) => {
     btn.addEventListener("click", goToLevel1);
+  });
+
+  // ── Mobile tab pills inside level-2 screens (e.g. Produtos > Hotéis/Buyers) ──
+  // Click only — this is a touch surface, no hover equivalent. Each tab's
+  // accordions live in their own always-in-DOM tabpanel, so switching tabs
+  // doesn't reset the other tab's open/closed accordion state.
+  mobile.querySelectorAll(".upsites-mega-nav__mobile-tabs").forEach((tabs) => {
+    const screen = tabs.closest(".upsites-mega-nav__screen--level2");
+    if (!screen) return;
+    const tabButtons = tabs.querySelectorAll(".upsites-mega-nav__mobile-tab");
+    const tabpanels = screen.querySelectorAll(":scope > .upsites-mega-nav__mobile-tabpanel");
+
+    tabButtons.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const index = tab.dataset.mobileTab;
+        tabButtons.forEach((t) => {
+          const active = t === tab;
+          t.classList.toggle("is-active", active);
+          t.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        tabpanels.forEach((p) => {
+          p.classList.toggle("is-active", p.dataset.mobileTabpanel === index);
+        });
+      });
+    });
   });
 
   // ── Column accordions inside level-2 screens ──

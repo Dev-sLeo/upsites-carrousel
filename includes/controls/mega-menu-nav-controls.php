@@ -13,6 +13,139 @@ trait UpSites_Mega_Menu_Nav_Controls
 	protected function register_controls()
 	{
 
+		// ── Content Tab — Marca (mobile) ──────────────────────────────
+		$this->start_controls_section(
+			'section_mobile_brand',
+			[
+				'label' => __('Marca (mobile)', 'upsites-addons'),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'mobile_brand_help',
+			[
+				'type'            => Controls_Manager::RAW_HTML,
+				'raw'             => __('Usados só no cabeçalho do menu off-canvas mobile — a barra desktop continua sem logo.', 'upsites-addons'),
+				'content_classes' => 'elementor-descriptor',
+			]
+		);
+
+		$this->add_control(
+			'mobile_logo',
+			[
+				'label'   => __('Logo', 'upsites-addons'),
+				'type'    => Controls_Manager::MEDIA,
+				'default' => ['url' => ''],
+			]
+		);
+
+		$this->add_control(
+			'mobile_logo_link',
+			[
+				'label'       => __('Link do logo', 'upsites-addons'),
+				'type'        => Controls_Manager::URL,
+				'default'     => ['url' => home_url('/')],
+				'label_block' => true,
+			]
+		);
+
+		$this->end_controls_section();
+
+		// ── Content Tab — Busca (mobile) ──────────────────────────────
+		$this->start_controls_section(
+			'section_mobile_search',
+			[
+				'label' => __('Busca (mobile)', 'upsites-addons'),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'mobile_show_search',
+			[
+				'label'        => __('Mostrar campo de busca', 'upsites-addons'),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __('Sim', 'upsites-addons'),
+				'label_off'    => __('Não', 'upsites-addons'),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'mobile_search_placeholder',
+			[
+				'label'     => __('Placeholder', 'upsites-addons'),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => __('Pesquisar', 'upsites-addons'),
+				'condition' => ['mobile_show_search' => 'yes'],
+			]
+		);
+
+		$this->add_control(
+			'mobile_search_action_url',
+			[
+				'label'       => __('URL de busca (action do form)', 'upsites-addons'),
+				'type'        => Controls_Manager::URL,
+				'default'     => ['url' => home_url('/')],
+				'label_block' => true,
+				'condition'   => ['mobile_show_search' => 'yes'],
+			]
+		);
+
+		$this->end_controls_section();
+
+		// ── Content Tab — Botões (mobile) ─────────────────────────────
+		$this->start_controls_section(
+			'section_mobile_ctas',
+			[
+				'label' => __('Botões (mobile)', 'upsites-addons'),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_secondary_text',
+			[
+				'label'   => __('Texto — botão secundário', 'upsites-addons'),
+				'type'    => Controls_Manager::TEXT,
+				'default' => __('Falar com um consultor', 'upsites-addons'),
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_secondary_url',
+			[
+				'label'       => __('Link — botão secundário', 'upsites-addons'),
+				'type'        => Controls_Manager::URL,
+				'label_block' => true,
+				'default'     => ['url' => '#'],
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_primary_text',
+			[
+				'label'     => __('Texto — botão primário', 'upsites-addons'),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => __('Solicitar demonstração', 'upsites-addons'),
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_primary_url',
+			[
+				'label'       => __('Link — botão primário', 'upsites-addons'),
+				'type'        => Controls_Manager::URL,
+				'label_block' => true,
+				'default'     => ['url' => '#'],
+			]
+		);
+
+		$this->end_controls_section();
+
 		// ── Content Tab — Rodapé do painel ────────────────────────────
 		$this->start_controls_section(
 			'section_panel_footer',
@@ -593,13 +726,72 @@ trait UpSites_Mega_Menu_Nav_Controls
 		$this->add_responsive_control(
 			'panel_column_gap',
 			[
-				'label'      => __('Espaço entre colunas', 'upsites-addons'),
+				'label'       => __('Espaço entre colunas — Colunas simples / Abas (Produtos, Recursos)', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px'],
+				'range'       => ['px' => ['min' => 0, 'max' => 100]],
+				'default'     => ['unit' => 'px', 'size' => 50],
+				'description' => __('Vale para os estilos "Abas + colunas" e "Colunas simples". Os estilos "Colunas + card promocional" e "Colunas com cards" têm seu próprio espaçamento, mais abaixo.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-mega-nav__columns' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'promo_row_gap',
+			[
+				'label'       => __('Espaço entre colunas — Colunas + card promocional (Soluções)', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px'],
+				'range'       => ['px' => ['min' => 0, 'max' => 100]],
+				'default'     => ['unit' => 'px', 'size' => 50],
+				'description' => __('Espaço entre o bloco de colunas, a linha divisória e o card promocional.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-mega-nav__tabpanel--columns_promo.is-active' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'promo_column_title_gap',
+			[
+				'label'      => __('Espaço título → itens — Colunas + card promocional (Soluções)', 'upsites-addons'),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => ['px'],
-				'range'      => ['px' => ['min' => 0, 'max' => 100]],
-				'default'    => ['unit' => 'px', 'size' => 50],
+				'range'      => ['px' => ['min' => 0, 'max' => 60]],
+				'default'    => ['unit' => 'px', 'size' => 20],
 				'selectors'  => [
-					'{{WRAPPER}} .upsites-mega-nav__columns' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .upsites-mega-nav__tabpanel--columns_promo .upsites-mega-nav__column' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'cards_columns_gap',
+			[
+				'label'       => __('Espaço entre grupos — Colunas com cards (Parceiros)', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px'],
+				'range'       => ['px' => ['min' => 0, 'max' => 100]],
+				'default'     => ['unit' => 'px', 'size' => 20],
+				'description' => __('Espaço entre os grupos (ex: "Nossos Parceiros", "BeePartner"). Cada grupo fica com a mesma largura, independente do conteúdo.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-mega-nav__tabpanel--columns_cards .upsites-mega-nav__columns' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'cards_items_gap',
+			[
+				'label'      => __('Espaço entre cards — Colunas com cards (Parceiros)', 'upsites-addons'),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range'      => ['px' => ['min' => 0, 'max' => 60]],
+				'default'    => ['unit' => 'px', 'size' => 20],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-mega-nav__tabpanel--columns_cards .upsites-mega-nav__links' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -761,6 +953,38 @@ trait UpSites_Mega_Menu_Nav_Controls
 			]
 		);
 
+		$this->add_control(
+			'panel_footer_decoration',
+			[
+				'label'   => __('Sublinhado (normal)', 'upsites-addons'),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'none',
+				'options' => [
+					'none'      => __('Nenhum', 'upsites-addons'),
+					'underline' => __('Sublinhado', 'upsites-addons'),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__panel-footer-link' => 'text-decoration: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'panel_footer_hover_decoration',
+			[
+				'label'   => __('Sublinhado (hover)', 'upsites-addons'),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'underline',
+				'options' => [
+					'none'      => __('Nenhum', 'upsites-addons'),
+					'underline' => __('Sublinhado', 'upsites-addons'),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__panel-footer-link:hover' => 'text-decoration: {{VALUE}} !important;',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Card promocional (Soluções) ──────────────────────
@@ -846,6 +1070,151 @@ trait UpSites_Mega_Menu_Nav_Controls
 				'name'     => 'promo_link_typography',
 				'label'    => __('Tipografia — Link', 'upsites-addons'),
 				'selector' => '{{WRAPPER}} .upsites-mega-nav__promo-link',
+			]
+		);
+
+		$this->add_control(
+			'promo_link_decoration',
+			[
+				'label'   => __('Sublinhado (normal)', 'upsites-addons'),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'none',
+				'options' => [
+					'none'      => __('Nenhum', 'upsites-addons'),
+					'underline' => __('Sublinhado', 'upsites-addons'),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__promo-link' => 'text-decoration: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'promo_link_hover_decoration',
+			[
+				'label'   => __('Sublinhado (hover)', 'upsites-addons'),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'underline',
+				'options' => [
+					'none'      => __('Nenhum', 'upsites-addons'),
+					'underline' => __('Sublinhado', 'upsites-addons'),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__promo-link:hover' => 'text-decoration: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		// ── Style Tab — Cabeçalho e botões (mobile) ──────────────────────
+		$this->start_controls_section(
+			'section_style_mobile',
+			[
+				'label' => __('Cabeçalho e botões (mobile)', 'upsites-addons'),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'mobile_logo_max_height',
+			[
+				'label'      => __('Altura máxima do logo', 'upsites-addons'),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range'      => ['px' => ['min' => 12, 'max' => 80]],
+				'default'    => ['unit' => 'px', 'size' => 28],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-mega-nav__mobile-logo img' => 'max-height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_search_bg_color',
+			[
+				'label'     => __('Busca — cor de fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'separator' => 'before',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__mobile-search input' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_search_border_color',
+			[
+				'label'     => __('Busca — cor da borda', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#e8e8e8',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__mobile-search input' => 'border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_primary_bg',
+			[
+				'label'     => __('Botão primário — fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#fec437',
+				'separator' => 'before',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__cta--primary' => 'background-color: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_primary_color',
+			[
+				'label'     => __('Botão primário — texto', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#262626',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__cta--primary' => 'color: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_cta_secondary_color',
+			[
+				'label'     => __('Botão secundário — texto e borda', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#262626',
+				'separator' => 'before',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__cta--secondary' => 'color: {{VALUE}} !important; border-color: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_tab_active_bg',
+			[
+				'label'     => __('Aba mobile ativa — fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#fec437',
+				'separator' => 'before',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__mobile-tab.is-active' => 'background-color: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->add_control(
+			'mobile_tab_active_color',
+			[
+				'label'     => __('Aba mobile ativa — texto', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#262626',
+				'selectors' => [
+					'{{WRAPPER}} .upsites-mega-nav__mobile-tab.is-active' => 'color: {{VALUE}} !important;',
+				],
 			]
 		);
 

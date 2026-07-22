@@ -3,7 +3,7 @@
 /**
  * Plugin Name: UpSites Add-ons
  * Description: Add-ons para Elementor desenvolvidos pela UpSites.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: UpSites
  * Text Domain: upsites-addons
  * Requires Plugins: elementor

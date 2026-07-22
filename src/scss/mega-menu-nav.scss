@@ -119,16 +119,26 @@ $color-white: #ffffff;
 
 .upsites-mega-nav__burger {
 	display: none;
-	flex-direction: column;
-	gap: 5px;
+	align-items: center;
+	justify-content: center;
 	padding: 6px;
-	margin-left: auto;
+	color: $color-text;
 
-	span {
+	svg {
 		display: block;
-		width: 22px;
-		height: 2px;
-		background: $color-text;
+		width: 24px;
+		height: 24px;
+	}
+
+	// !important: this is a <button>, and theme/Elementor global button
+	// hover styles (e.g. a background/color change) carry enough specificity
+	// to override a plain class selector — no hover effect on this icon.
+	&:hover,
+	&:focus,
+	&:active {
+		background: none !important;
+		color: $color-text !important;
+		box-shadow: none !important;
 	}
 
 	@media (max-width: $bp-mobile) {
@@ -372,12 +382,14 @@ $color-white: #ffffff;
 	border-radius: 8px;
 	width: 100%;
 
+	// !important: theme/Elementor global link/button hover styles otherwise
+	// override this (same pattern as every other hover fix in this file).
 	&:hover {
-		background: rgba(254, 196, 55, 0.1);
+		background: rgba(254, 196, 55, 0.1) !important;
 	}
 
 	&.is-highlighted {
-		background: rgba(254, 196, 55, 0.15);
+		background: rgba(254, 196, 55, 0.15) !important;
 	}
 }
 
@@ -389,6 +401,15 @@ $color-white: #ffffff;
 	height: 32px;
 	border-radius: 10px;
 	flex-shrink: 0;
+	transition: background-color 0.15s ease;
+
+	// Overrides the per-item inline background-color (from the "Cor de fundo
+	// do ícone" control) on hover — !important is needed since an inline
+	// style otherwise always wins over a stylesheet rule — so only the
+	// item's own amber hover background shows through.
+	.upsites-mega-nav__link:hover & {
+		background-color: transparent !important;
+	}
 }
 
 .upsites-mega-nav__icon {
@@ -532,12 +553,12 @@ $color-white: #ffffff;
 		padding: 15px;
 
 		&:hover {
-			background: rgba(254, 196, 55, 0.1);
+			background: rgba(254, 196, 55, 0.1) !important;
 		}
 
 		&.is-highlighted {
-			background: #fef9eb;
-			border-color: transparent;
+			background: #fef9eb !important;
+			border-color: transparent !important;
 		}
 	}
 
@@ -548,6 +569,9 @@ $color-white: #ffffff;
 }
 
 // ── Mobile off-canvas ───────────────────────────────────────
+// Flex column top-to-bottom (header → scrollable screens → …) so a screen's
+// own footer (e.g. the CTA buttons on level 1) can be pinned to the bottom
+// of the viewport via margin-top: auto, instead of just trailing the list.
 .upsites-mega-nav__mobile {
 	display: none;
 	position: fixed;
@@ -557,10 +581,10 @@ $color-white: #ffffff;
 	visibility: hidden;
 	opacity: 0;
 	transition: opacity 0.25s ease, visibility 0.25s ease;
-	overflow-y: auto;
 
 	@media (max-width: $bp-mobile) {
-		display: block;
+		display: flex;
+		flex-direction: column;
 	}
 
 	&.is-open {
@@ -572,36 +596,128 @@ $color-white: #ffffff;
 .upsites-mega-nav__mobile-header {
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: space-between;
+	flex-shrink: 0;
 	padding: 16px 20px;
 	border-bottom: 1px solid $color-border;
+}
+
+.upsites-mega-nav__mobile-logo img {
+	display: block;
+	max-height: 28px;
+	width: auto;
+}
+
+// The header shows either the logo (level 1) or the "Voltar" control
+// (level 2) — never both — so the back action sits where the header always
+// is, instead of a second row appearing below a persistent logo.
+.upsites-mega-nav__mobile-header-back {
+	display: none;
+	align-items: center;
+	gap: 8px;
+	font-weight: 500;
+	background: none !important;
+	color: $color-text !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+}
+
+.upsites-mega-nav__mobile.is-level2 {
+	.upsites-mega-nav__mobile-logo {
+		display: none;
+	}
+
+	.upsites-mega-nav__mobile-header-back {
+		display: flex;
+	}
 }
 
 .upsites-mega-nav__close {
 	font-size: 28px;
 	line-height: 1;
-	color: $color-text;
+	background: none !important;
+	color: $color-text !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+}
+
+.upsites-mega-nav__mobile-search {
+	margin-bottom: 16px;
+
+	input {
+		width: 100%;
+		padding: 12px 16px;
+		border: 1px solid $color-border;
+		border-radius: 8px;
+		background: $color-white;
+		font-size: 14px;
+
+		&:focus {
+			outline: none;
+			border-color: #b7b7b7;
+		}
+	}
+}
+
+.upsites-mega-nav__mobile-ctas {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	// Pins the CTAs to the bottom of the screen (Figma) instead of just
+	// trailing the list — the parent screen is a flex column that's always
+	// at least the full viewport height (see .upsites-mega-nav__screen).
+	margin-top: auto;
+	padding-top: 24px;
+}
+
+.upsites-mega-nav__cta {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 14px 20px;
+	border-radius: 8px;
+	font-weight: 600;
+	text-align: center;
+
+	&--secondary {
+		border: 1px solid $color-text;
+		color: $color-text;
+	}
+
+	&--primary {
+		background: #fec437;
+		color: $color-text;
+	}
 }
 
 .upsites-mega-nav__mobile-screens {
 	position: relative;
-	overflow: hidden;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
 }
 
 .upsites-mega-nav__screen {
 	display: none;
+	flex-direction: column;
+	min-height: 100%;
 	padding: 20px;
-	min-height: 60vh;
 
 	&.is-active {
-		display: block;
+		display: flex;
 	}
 }
 
 .upsites-mega-nav__mobile-list {
 	list-style: none;
-	margin: 0 0 20px;
+	margin: 0;
 	padding: 0;
+
+	// No stray line right above the CTA buttons (Figma) — only between rows.
+	li:last-child .upsites-mega-nav__mobile-link {
+		border-bottom: none;
+	}
 }
 
 .upsites-mega-nav__mobile-link {
@@ -611,22 +727,21 @@ $color-white: #ffffff;
 	width: 100%;
 	padding: 14px 0;
 	border-bottom: 1px solid $color-border;
-	color: $color-text;
 	font-weight: 500;
 	text-align: left;
+
+	// !important: this is a <button> when the item has a submenu, and
+	// theme/Elementor global button styles carry enough specificity to
+	// override a plain class selector here — this menu is straight-edged
+	// everywhere (Figma), no rounded corners on any row.
+	background: none !important;
+	color: $color-text !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
 
 	.upsites-mega-nav__chevron {
 		transform: rotate(-45deg);
 	}
-}
-
-.upsites-mega-nav__back {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 16px;
-	color: $color-text;
-	font-weight: 500;
 }
 
 .upsites-mega-nav__mobile-group-label {
@@ -635,6 +750,73 @@ $color-white: #ffffff;
 	text-transform: uppercase;
 	color: $color-muted;
 	margin: 20px 0 8px;
+}
+
+// ── Mobile tab "switch" (multi-tab nav items, e.g. Produtos > Hotéis/Buyers) ──
+// Figma: a single shared rounded track (not two independent pill buttons) —
+// the active segment gets a highlight, the inactive one just sits on the
+// track with no background of its own. Both segments split the track's
+// width evenly (flex: 1, min-width: 0) so it always fits the screen instead
+// of overflowing when a label is long.
+.upsites-mega-nav__mobile-tabs {
+	display: flex;
+	width: 100%;
+	background: $color-white;
+	border: 1px solid #dcdaf5;
+	border-radius: 999px;
+	padding: 6px;
+	margin-bottom: 20px;
+	box-sizing: border-box;
+}
+
+.upsites-mega-nav__mobile-tab {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1 1 0;
+	min-width: 0;
+	gap: 6px;
+	padding: 10px 12px;
+	border-radius: 999px;
+	text-align: center;
+	white-space: normal;
+
+	// !important: this is a <button>, and theme/Elementor global button
+	// styles (e.g. a pink pill background) carry enough specificity to
+	// override a plain class selector here — same issue already fixed on
+	// the other buttons in this widget (.upsites-mega-nav__tab, __top-link).
+	background-color: transparent !important;
+	color: $color-text !important;
+
+	&.is-active {
+		background-color: #fec437 !important;
+	}
+}
+
+// Two-line label (Figma): a small eyebrow (the parent item, e.g. "Produtos")
+// above the bold segment name (e.g. "Hotéis").
+.upsites-mega-nav__mobile-tab-text {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.3;
+}
+
+.upsites-mega-nav__mobile-tab-eyebrow {
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.upsites-mega-nav__mobile-tab-title {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.upsites-mega-nav__mobile-tabpanel {
+	display: none;
+
+	&.is-active {
+		display: block;
+	}
 }
 
 .upsites-mega-nav__accordion {
@@ -648,8 +830,15 @@ $color-white: #ffffff;
 	width: 100%;
 	padding: 14px 0;
 	font-weight: 600;
-	color: $color-text;
 	text-align: left;
+
+	// !important: this is a <button>, and theme/Elementor global button
+	// styles (e.g. a pink pill background) carry enough specificity to
+	// override a plain class selector — same fix as the other buttons here.
+	background: none !important;
+	color: $color-text !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
 
 	.upsites-mega-nav__chevron {
 		transform: rotate(45deg);

@@ -85,9 +85,19 @@ function setup(container) {
 
   const getTopOffset = () => {
     const w = window.innerWidth;
-    if (w <= 767)  return parseInt(container.dataset.topOffsetMobile, 10) || 0;
+    if (w <= 679)  return parseInt(container.dataset.topOffsetMobile, 10) || 0;
     if (w <= 1024) return parseInt(container.dataset.topOffsetTablet, 10) || 0;
     return parseInt(container.dataset.topOffset, 10) || 0;
+  };
+
+  // Extra "reading time" steps after the stacking animation finishes.
+  // Smaller on tablet/mobile, where shorter cards make the leftover
+  // pinned scroll read as a dead empty gap at the end of the section.
+  const getReadingSteps = () => {
+    const w = window.innerWidth;
+    if (w <= 679)  return 0.15;
+    if (w <= 1024) return 0.3;
+    return 1;
   };
 
   const st = ScrollTrigger.create({
@@ -95,7 +105,7 @@ function setup(container) {
     pin:                 container,
     start:               () => `top top+=${getTopOffset()}`,
     // extra step at the end gives reading time before the pin releases
-    end:                 () => `+=${perStep() * total}`,
+    end:                 () => `+=${perStep() * ((total - 1) + getReadingSteps())}`,
     scrub:               0.8,
     anticipatePin:       1,
     invalidateOnRefresh: true,
