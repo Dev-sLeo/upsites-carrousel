@@ -15,7 +15,20 @@ final class UpSites_Addons {
 	}
 
 	private function __construct() {
+		$this->init_update_checker();
 		add_action( 'plugins_loaded', [ $this, 'init' ] );
+	}
+
+	private function init_update_checker() {
+		$update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+			'https://github.com/upsitesdigital/upsites-addons/',
+			UPSITES_ADDONS_PATH . 'upsites-addons.php',
+			'upsites-addons'
+		);
+
+		if ( defined( 'UPSITES_ADDONS_GITHUB_TOKEN' ) && UPSITES_ADDONS_GITHUB_TOKEN ) {
+			$update_checker->setAuthentication( UPSITES_ADDONS_GITHUB_TOKEN );
+		}
 	}
 
 	public function init() {
@@ -49,6 +62,9 @@ final class UpSites_Addons {
 
 		require_once UPSITES_ADDONS_PATH . 'includes/widgets/mega-menu-nav.php';
 		$widgets_manager->register( new \UpSites_Mega_Menu_Nav_Widget() );
+
+		require_once UPSITES_ADDONS_PATH . 'includes/widgets/button.php';
+		$widgets_manager->register( new \UpSites_Button_Widget() );
 	}
 
 	public function enqueue_styles() {
@@ -67,6 +83,12 @@ final class UpSites_Addons {
 		wp_enqueue_style(
 			'upsites-mega-menu-nav',
 			UPSITES_ADDONS_URL . 'assets/css/mega-menu-nav.css',
+			[],
+			UPSITES_ADDONS_VERSION
+		);
+		wp_enqueue_style(
+			'upsites-button',
+			UPSITES_ADDONS_URL . 'assets/css/button.css',
 			[],
 			UPSITES_ADDONS_VERSION
 		);
@@ -90,6 +112,13 @@ final class UpSites_Addons {
 		wp_register_script(
 			'upsites-mega-menu-nav',
 			UPSITES_ADDONS_URL . 'assets/js/mega-menu-nav.js',
+			[],
+			UPSITES_ADDONS_VERSION,
+			true
+		);
+		wp_register_script(
+			'upsites-button',
+			UPSITES_ADDONS_URL . 'assets/js/button.js',
 			[],
 			UPSITES_ADDONS_VERSION,
 			true

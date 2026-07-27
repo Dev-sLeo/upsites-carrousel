@@ -1,0 +1,175 @@
+// UpSites Button
+
+$color-text: #262626;
+$color-primary-bg: #fec437;
+$color-primary-bg-hover: #e5b132;
+
+.upsites-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 18px 24px;
+	border: 0;
+	border-radius: 12px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 18px;
+	text-align: center;
+	white-space: nowrap;
+	text-decoration: none;
+	cursor: pointer;
+	color: $color-text;
+	transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+
+	&:hover,
+	&:focus {
+		text-decoration: none;
+	}
+}
+
+.upsites-btn-wrap {
+	display: grid;
+	justify-items: start;
+}
+
+// ── Size presets (overridden by the custom "Padding"/Typography controls
+// whenever the user sets one, since those inline styles are printed after
+// this stylesheet) ────────────────────────────────────────────────────
+.upsites-btn--size-xs {
+	padding: 8px 14px;
+	font-size: 13px;
+}
+
+.upsites-btn--size-sm {
+	padding: 12px 18px;
+	font-size: 14px;
+}
+
+.upsites-btn--size-md {
+	padding: 18px 24px;
+	font-size: 16px;
+}
+
+.upsites-btn--size-lg {
+	padding: 22px 32px;
+	font-size: 18px;
+}
+
+.upsites-btn--size-xl {
+	padding: 26px 40px;
+	font-size: 20px;
+}
+
+// ── Style variants ──────────────────────────────────────────
+.upsites-btn--primary {
+	background-color: $color-primary-bg;
+
+	&:hover {
+		background-color: $color-primary-bg-hover;
+	}
+}
+
+.upsites-btn--secondary {
+	background-color: transparent;
+	border: 1px solid $color-text;
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.05);
+	}
+}
+
+.upsites-btn--link {
+	background: none;
+	padding: 0;
+	border-radius: 0;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// Figma "CTA" text-link presets — color only; size/gap/typography stay on
+// the shared, already-configurable controls since both variants share them.
+.upsites-btn--link-light {
+	color: #8e52de;
+
+	&:hover {
+		color: #8e52de;
+	}
+}
+
+.upsites-btn--link-dark {
+	color: #ffffff;
+
+	&:hover {
+		color: #ffffff;
+	}
+}
+
+// ── Text ─────────────────────────────────────────────────────
+.upsites-btn__text {
+	display: inline-block;
+}
+
+// ── Icon ─────────────────────────────────────────────────────
+.upsites-btn__icon {
+	position: relative;
+	overflow: hidden;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+.upsites-btn__icon--static {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	svg,
+	img {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+}
+
+// Two stacked copies of the same icon swap places on hover (Figma: "Smart
+// Animate", Ease Out, 200ms) — the default arrow starts centered while its
+// twin sits hidden below-left (clipped by overflow: hidden); on hover the
+// visible one slides out to the upper-right while the hidden one slides in
+// to take its place. Percentages (not px) keep this correct at any icon size.
+.upsites-btn__icon-arrow {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.2s ease-out;
+
+	svg,
+	img {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+}
+
+.upsites-btn__icon-arrow--a {
+	transform: translate(0, 0);
+}
+
+.upsites-btn__icon-arrow--b {
+	transform: translate(-79.17%, 79.17%);
+}
+
+.upsites-btn:hover {
+	.upsites-btn__icon-arrow--a {
+		transform: translate(79.17%, -79.17%);
+	}
+
+	.upsites-btn__icon-arrow--b {
+		transform: translate(0, 0);
+	}
+}

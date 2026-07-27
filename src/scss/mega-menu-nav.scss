@@ -413,8 +413,10 @@ $color-white: #ffffff;
 }
 
 .upsites-mega-nav__icon {
+	display: block;
 	width: 24px;
 	height: 24px;
+	object-fit: contain;
 }
 
 .upsites-mega-nav__link-text {

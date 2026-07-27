@@ -6,6 +6,7 @@ module.exports = {
 		'accordion-slider': './src/js/accordion-slider.js',
 		'cards-carousel':   './src/js/cards-carousel.js',
 		'mega-menu-nav':    './src/js/mega-menu-nav.js',
+		'button':           './src/js/button.js',
 	},
 
 	output: {
