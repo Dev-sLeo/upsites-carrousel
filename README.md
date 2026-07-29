@@ -1,4 +1,4 @@
-# UpSites Add-ons
+# Upsites Carrousel
 
 Plugin de widgets customizados para o Elementor, desenvolvido pela UpSites.
 
@@ -27,7 +27,7 @@ upsites-addons/
 
 ### Como o plugin inicializa
 
-1. `upsites-addons.php` define as constantes globais (`UPSITES_ADDONS_PATH`, `UPSITES_ADDONS_URL`, `UPSITES_ADDONS_VERSION`) e carrega `includes/plugin.php`.
+1. `upsites-addons.php` define as constantes globais (`UPSITES_CARROUSEL_PATH`, `UPSITES_CARROUSEL_URL`, `UPSITES_CARROUSEL_VERSION`) e carrega `includes/plugin.php`.
 2. `includes/plugin.php` contém a classe `UpSites_Addons` (singleton) que se conecta aos hooks do Elementor:
    - `elementor/widgets/register` — registra cada widget da pasta `includes/widgets/`
    - `elementor/frontend/after_enqueue_styles` — enfileira os CSS
@@ -39,7 +39,7 @@ upsites-addons/
 1. Crie `includes/widgets/meu-widget.php` com uma classe que estenda `\Elementor\Widget_Base`.
 2. Em `includes/plugin.php`, dentro de `register_widgets()`, adicione:
    ```php
-   require_once UPSITES_ADDONS_PATH . 'includes/widgets/meu-widget.php';
+   require_once UPSITES_CARROUSEL_PATH . 'includes/widgets/meu-widget.php';
    $widgets_manager->register( new \MeuWidget() );
    ```
 3. Coloque os assets em `assets/css/meu-widget.css` e `assets/js/meu-widget.js` e enfileire-os nos métodos `enqueue_styles()` e `register_scripts()`.

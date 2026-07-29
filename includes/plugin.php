@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-final class UpSites_Addons {
+final class UpSites_Carrousel_Plugin {
 
 	private static $instance = null;
 
@@ -21,13 +21,13 @@ final class UpSites_Addons {
 
 	private function init_update_checker() {
 		$update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
-			'https://github.com/upsitesdigital/upsites-addons/',
-			UPSITES_ADDONS_PATH . 'upsites-addons.php',
-			'upsites-addons'
+			'https://github.com/Dev-sLeo/upsites-carrousel/',
+			UPSITES_CARROUSEL_PATH . 'upsites-addons.php',
+			'upsites-carrousel'
 		);
 
-		if ( defined( 'UPSITES_ADDONS_GITHUB_TOKEN' ) && UPSITES_ADDONS_GITHUB_TOKEN ) {
-			$update_checker->setAuthentication( UPSITES_ADDONS_GITHUB_TOKEN );
+		if ( defined( 'UPSITES_CARROUSEL_GITHUB_TOKEN' ) && UPSITES_CARROUSEL_GITHUB_TOKEN ) {
+			$update_checker->setAuthentication( UPSITES_CARROUSEL_GITHUB_TOKEN );
 		}
 	}
 
@@ -54,73 +54,25 @@ final class UpSites_Addons {
 	}
 
 	public function register_widgets( $widgets_manager ) {
-		require_once UPSITES_ADDONS_PATH . 'includes/widgets/accordion-slider.php';
-		$widgets_manager->register( new \UpSites_Accordion_Slider_Widget() );
-
-		require_once UPSITES_ADDONS_PATH . 'includes/widgets/cards-carousel.php';
-		$widgets_manager->register( new \UpSites_Cards_Carousel_Widget() );
-
-		require_once UPSITES_ADDONS_PATH . 'includes/widgets/mega-menu-nav.php';
-		$widgets_manager->register( new \UpSites_Mega_Menu_Nav_Widget() );
-
-		require_once UPSITES_ADDONS_PATH . 'includes/widgets/button.php';
-		$widgets_manager->register( new \UpSites_Button_Widget() );
+		require_once UPSITES_CARROUSEL_PATH . 'includes/widgets/carousel.php';
+		$widgets_manager->register( new \UpSites_Carousel_Widget() );
 	}
 
 	public function enqueue_styles() {
 		wp_enqueue_style(
-			'upsites-accordion-slider',
-			UPSITES_ADDONS_URL . 'assets/css/accordion-slider.css',
+			'upsites-carousel',
+			UPSITES_CARROUSEL_URL . 'assets/css/carousel.css',
 			[],
-			UPSITES_ADDONS_VERSION
-		);
-		wp_enqueue_style(
-			'upsites-cards-carousel',
-			UPSITES_ADDONS_URL . 'assets/css/cards-carousel.css',
-			[],
-			UPSITES_ADDONS_VERSION
-		);
-		wp_enqueue_style(
-			'upsites-mega-menu-nav',
-			UPSITES_ADDONS_URL . 'assets/css/mega-menu-nav.css',
-			[],
-			UPSITES_ADDONS_VERSION
-		);
-		wp_enqueue_style(
-			'upsites-button',
-			UPSITES_ADDONS_URL . 'assets/css/button.css',
-			[],
-			UPSITES_ADDONS_VERSION
+			UPSITES_CARROUSEL_VERSION
 		);
 	}
 
 	public function register_scripts() {
 		wp_register_script(
-			'upsites-accordion-slider',
-			UPSITES_ADDONS_URL . 'assets/js/accordion-slider.js',
-			[ 'jquery' ],
-			UPSITES_ADDONS_VERSION,
-			true
-		);
-		wp_register_script(
-			'upsites-cards-carousel',
-			UPSITES_ADDONS_URL . 'assets/js/cards-carousel.js',
-			[],
-			UPSITES_ADDONS_VERSION,
-			true
-		);
-		wp_register_script(
-			'upsites-mega-menu-nav',
-			UPSITES_ADDONS_URL . 'assets/js/mega-menu-nav.js',
-			[],
-			UPSITES_ADDONS_VERSION,
-			true
-		);
-		wp_register_script(
-			'upsites-button',
-			UPSITES_ADDONS_URL . 'assets/js/button.js',
-			[],
-			UPSITES_ADDONS_VERSION,
+			'upsites-carousel',
+			UPSITES_CARROUSEL_URL . 'assets/js/carousel.js',
+			['elementor-frontend'],
+			UPSITES_CARROUSEL_VERSION,
 			true
 		);
 	}
@@ -128,7 +80,7 @@ final class UpSites_Addons {
 	public function notice_elementor_missing() {
 		$message = sprintf(
 			'<strong>%s</strong> requer o <strong>Elementor</strong> instalado e ativado.',
-			'UpSites Add-ons'
+			'Upsites Carrousel'
 		);
 		echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
 	}

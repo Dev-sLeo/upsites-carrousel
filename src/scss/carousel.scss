@@ -1,0 +1,210 @@
+// ── Reset — anula estilos padrão do tema/Elementor dentro do widget ──
+// (listas com bullet nativo, links sublinhados/coloridos, margens de
+// heading/parágrafo herdadas do editor de texto do Elementor, etc.)
+.upsites-carousel,
+.upsites-carousel * {
+	box-sizing: border-box;
+}
+
+// Splide keeps the root at `visibility: hidden` until its own JS adds
+// `.is-initialized` (avoids a flash of unstyled slides). Inside the
+// Elementor editor iframe some environments (third-party widgets/plugins
+// patching the iframe's globals) can break Splide's internal element
+// detection, so the mount silently fails and the widget never gets that
+// class — leaving editors staring at a blank canvas with no way to tell
+// content is even there. Force visibility back on in that context only;
+// the real front-end is unaffected since it mounts normally.
+body.elementor-editor-active .upsites-carousel.splide {
+	visibility: visible;
+}
+
+.upsites-carousel {
+	position: relative;
+
+	ul.splide__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li.splide__slide {
+		margin: 0;
+		list-style: none;
+	}
+
+	.splide__track {
+		padding-bottom: 8px;
+	}
+
+	// ── Setas ──────────────────────────────────────────────────────────
+	.splide__arrow,
+	.splide__arrow--prev,
+	.splide__arrow--next {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fff;
+		box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+		opacity: 1;
+
+		svg {
+			fill: #1a1a1a;
+		}
+
+		&:hover {
+			opacity: 0.85;
+		}
+
+		&:disabled {
+			opacity: 0.35;
+			cursor: default;
+		}
+	}
+
+	// Seta customizada (upload/ícone escolhido no painel), renderizada
+	// pelo próprio widget com as classes que o Splide já reconhece e
+	// conecta sozinho (splide__arrow--prev / splide__arrow--next).
+	.upsites-carousel__custom-arrow {
+		position: absolute;
+		top: 50%;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+		cursor: pointer;
+		transform: translateY(-50%);
+
+		svg,
+		img,
+		i {
+			width: 100%;
+			height: 100%;
+		}
+
+		&.splide__arrow--prev {
+			left: 0;
+			transform: translateY(-50%) rotate(180deg);
+		}
+
+		&.splide__arrow--next {
+			right: 0;
+		}
+
+		&:disabled {
+			opacity: 0.35;
+		}
+	}
+
+	// ── Bullets ────────────────────────────────────────────────────────
+	.splide__pagination {
+		align-items: center;
+	}
+
+	.splide__pagination__page {
+		background: rgba(0, 0, 0, 0.2);
+		opacity: 1;
+		border-radius: 50%;
+		transition: background-color 0.2s ease;
+
+		&.is-active {
+			background: #1a1a1a;
+			transform: none;
+		}
+	}
+}
+
+.upsites-carousel__card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+	background: #fff;
+	border-radius: 8px;
+
+	.upsites-carousel__media {
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+			max-width: 100%;
+		}
+	}
+
+	.upsites-carousel__card-body {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 20px;
+	}
+
+	.upsites-carousel__title {
+		margin: 0;
+		padding: 0;
+		font-size: 18px;
+		line-height: 1.3;
+	}
+
+	.upsites-carousel__description {
+		margin: 0;
+		padding: 0;
+		font-size: 14px;
+		line-height: 1.5;
+		opacity: 0.8;
+	}
+
+	.upsites-carousel__button {
+		display: inline-block;
+		margin-top: auto;
+		font-size: 14px;
+		text-decoration: underline;
+		color: inherit;
+
+		&:hover,
+		&:focus,
+		&:visited {
+			color: inherit;
+		}
+	}
+
+	// ── Overlay — texto sobreposto à imagem ──────────────────────────
+	&--overlay {
+		position: relative;
+
+		.upsites-carousel__media {
+			position: absolute;
+			inset: 0;
+
+			img {
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.upsites-carousel__card-body {
+			position: relative;
+			z-index: 1;
+			justify-content: flex-end;
+			min-height: 320px;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+			color: #fff;
+		}
+
+		.upsites-carousel__description,
+		.upsites-carousel__button {
+			color: inherit;
+		}
+	}
+
+	// ── Minimalista — só título e botão ───────────────────────────────
+	&--minimal {
+		background: transparent;
+		box-shadow: none;
+
+		.upsites-carousel__card-body {
+			padding: 12px 0;
+		}
+	}
+}

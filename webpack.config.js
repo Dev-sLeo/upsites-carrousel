@@ -3,10 +3,7 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 module.exports = {
 	entry: {
-		'accordion-slider': './src/js/accordion-slider.js',
-		'cards-carousel':   './src/js/cards-carousel.js',
-		'mega-menu-nav':    './src/js/mega-menu-nav.js',
-		'button':           './src/js/button.js',
+		'carousel': './src/js/carousel.js',
 	},
 
 	output: {
@@ -38,6 +35,13 @@ module.exports = {
 					loader:  'sass-loader',
 					options: { api: 'modern' },
 				},
+				],
+			},
+			{
+				test: /\.css$/,
+				use:  [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
 				],
 			},
 		],
