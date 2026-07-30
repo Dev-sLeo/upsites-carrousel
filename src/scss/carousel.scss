@@ -155,9 +155,25 @@ body.elementor-editor-active .upsites-carousel.splide {
 		opacity: 0.8;
 	}
 
-	.upsites-carousel__button {
+	.upsites-carousel__eyebrow {
 		display: inline-block;
+		width: fit-content;
+		padding: 6px 14px;
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: #fff;
+		background: rgba(255, 255, 255, 0.15);
+		border-radius: 999px;
+	}
+
+	.upsites-carousel__button {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
 		margin-top: auto;
+		width: fit-content;
 		font-size: 14px;
 		text-decoration: underline;
 		color: inherit;
@@ -166,6 +182,27 @@ body.elementor-editor-active .upsites-carousel.splide {
 		&:focus,
 		&:visited {
 			color: inherit;
+		}
+
+		&--has-icon {
+			text-decoration: none;
+		}
+	}
+
+	.upsites-carousel__button-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+
+		svg,
+		i {
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
 		}
 	}
 
@@ -205,6 +242,82 @@ body.elementor-editor-active .upsites-carousel.splide {
 
 		.upsites-carousel__card-body {
 			padding: 12px 0;
+		}
+	}
+
+	// ── Hero — texto à esquerda sobre a imagem, com eyebrow e botão com ícone ──
+	&--hero {
+		position: relative;
+		min-height: 480px;
+		background: #1a1a1a;
+
+		.upsites-carousel__media {
+			position: absolute;
+			inset: 0;
+
+			img {
+				height: 100%;
+				object-fit: cover;
+			}
+
+			// Escurece a imagem para o texto branco continuar legível,
+			// independente da foto escolhida.
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(90deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.1) 100%);
+			}
+		}
+
+		.upsites-carousel__card-body {
+			position: relative;
+			z-index: 1;
+			justify-content: center;
+			align-items: flex-start;
+			height: 100%;
+			min-height: 480px;
+			padding: 56px;
+			text-align: left;
+			color: #fff;
+			gap: 16px;
+		}
+
+		.upsites-carousel__title {
+			max-width: 560px;
+			font-size: 40px;
+			font-weight: 700;
+			line-height: 1.15;
+		}
+
+		.upsites-carousel__description {
+			max-width: 480px;
+			font-size: 16px;
+			color: inherit;
+			opacity: 0.9;
+		}
+
+		.upsites-carousel__button {
+			margin-top: 12px;
+			padding: 10px 10px 10px 22px;
+			font-size: 15px;
+			font-weight: 600;
+			color: #1a1a1a;
+			text-decoration: none;
+			background: #fff;
+			border-radius: 999px;
+		}
+
+		.upsites-carousel__button-icon {
+			background: #1a1a1a;
+
+			svg {
+				fill: #fff;
+			}
+
+			i {
+				color: #fff;
+			}
 		}
 	}
 }

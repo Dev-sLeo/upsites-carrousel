@@ -91,16 +91,31 @@ class UpSites_Carousel_Widget extends Widget_Base
 		];
 	}
 
+	private function render_button_icon($slide)
+	{
+		if (empty($slide['button_icon']['value'])) {
+			return;
+		}
+		?>
+		<span class="upsites-carousel__button-icon">
+			<?php Icons_Manager::render_icon($slide['button_icon'], ['aria-hidden' => 'true']); ?>
+		</span>
+		<?php
+	}
+
 	private function render_card($slide, $card_style)
 	{
-		$image       = ! empty($slide['image']['url']) ? $slide['image']['url'] : '';
-		$title       = ! empty($slide['title']) ? $slide['title'] : '';
-		$description = ! empty($slide['description']) ? $slide['description'] : '';
-		$show_button = ! empty($slide['show_button']) && 'yes' === $slide['show_button'];
-		$button_text = ! empty($slide['button_text']) ? $slide['button_text'] : '';
-		$button_url  = ! empty($slide['button_link']['url']) ? $slide['button_link']['url'] : '#';
-		$target      = ! empty($slide['button_link']['is_external']) ? ' target="_blank"' : '';
-		$rel         = ! empty($slide['button_link']['nofollow']) ? ' rel="nofollow"' : '';
+		$image        = ! empty($slide['image']['url']) ? $slide['image']['url'] : '';
+		$eyebrow      = ! empty($slide['eyebrow']) ? $slide['eyebrow'] : '';
+		$title        = ! empty($slide['title']) ? $slide['title'] : '';
+		$description  = ! empty($slide['description']) ? $slide['description'] : '';
+		$show_button  = ! empty($slide['show_button']) && 'yes' === $slide['show_button'];
+		$button_text  = ! empty($slide['button_text']) ? $slide['button_text'] : '';
+		$button_url   = ! empty($slide['button_link']['url']) ? $slide['button_link']['url'] : '#';
+		$target       = ! empty($slide['button_link']['is_external']) ? ' target="_blank"' : '';
+		$rel          = ! empty($slide['button_link']['nofollow']) ? ' rel="nofollow"' : '';
+		$has_icon     = ! empty($slide['button_icon']['value']);
+		$icon_position = ! empty($slide['button_icon_position']) ? $slide['button_icon_position'] : 'after';
 		?>
 		<div class="upsites-carousel__card upsites-carousel__card--<?php echo esc_attr($card_style); ?>">
 			<?php if ($image) : ?>
@@ -109,6 +124,9 @@ class UpSites_Carousel_Widget extends Widget_Base
 				</div>
 			<?php endif; ?>
 			<div class="upsites-carousel__card-body">
+				<?php if ($eyebrow) : ?>
+					<span class="upsites-carousel__eyebrow"><?php echo esc_html($eyebrow); ?></span>
+				<?php endif; ?>
 				<?php if ($title) : ?>
 					<h3 class="upsites-carousel__title"><?php echo esc_html($title); ?></h3>
 				<?php endif; ?>
@@ -116,8 +134,14 @@ class UpSites_Carousel_Widget extends Widget_Base
 					<p class="upsites-carousel__description"><?php echo esc_html($description); ?></p>
 				<?php endif; ?>
 				<?php if ($show_button && $button_text) : ?>
-					<a class="upsites-carousel__button" href="<?php echo esc_url($button_url); ?>"<?php echo $target . $rel; ?>>
-						<?php echo esc_html($button_text); ?>
+					<a class="upsites-carousel__button<?php echo $has_icon ? ' upsites-carousel__button--has-icon' : ''; ?>" href="<?php echo esc_url($button_url); ?>"<?php echo $target . $rel; ?>>
+						<?php if ($has_icon && 'before' === $icon_position) : ?>
+							<?php $this->render_button_icon($slide); ?>
+						<?php endif; ?>
+						<span class="upsites-carousel__button-text"><?php echo esc_html($button_text); ?></span>
+						<?php if ($has_icon && 'after' === $icon_position) : ?>
+							<?php $this->render_button_icon($slide); ?>
+						<?php endif; ?>
 					</a>
 				<?php endif; ?>
 			</div>

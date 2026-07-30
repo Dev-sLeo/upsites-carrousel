@@ -30,6 +30,19 @@ trait UpSites_Carousel_Controls
 				'label'   => __('Imagem', 'upsites-addons'),
 				'type'    => Controls_Manager::MEDIA,
 				'default' => ['url' => \Elementor\Utils::get_placeholder_image_src()],
+				'dynamic' => ['active' => true],
+			]
+		);
+
+		$repeater->add_control(
+			'eyebrow',
+			[
+				'label'       => __('Eyebrow (selo acima do título)', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'default'     => '',
+				'dynamic'     => ['active' => true],
+				'description' => __('Pequeno rótulo exibido em destaque acima do título, ex: "UPSITES".', 'upsites-addons'),
 			]
 		);
 
@@ -91,6 +104,31 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$repeater->add_control(
+			'button_icon',
+			[
+				'label'       => __('Ícone do botão', 'upsites-addons'),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'condition'   => ['show_button' => 'yes'],
+			]
+		);
+
+		$repeater->add_control(
+			'button_icon_position',
+			[
+				'label'     => __('Posição do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'after',
+				'options'   => [
+					'before' => __('Antes do texto', 'upsites-addons'),
+					'after'  => __('Depois do texto', 'upsites-addons'),
+				],
+				'condition' => ['show_button' => 'yes', 'button_icon[value]!' => ''],
+			]
+		);
+
 		$this->add_control(
 			'slides',
 			[
@@ -125,6 +163,7 @@ trait UpSites_Carousel_Controls
 					'default'  => __('Padrão — imagem, título e texto', 'upsites-addons'),
 					'overlay'  => __('Overlay — texto sobre a imagem', 'upsites-addons'),
 					'minimal'  => __('Minimalista — só título e botão', 'upsites-addons'),
+					'hero'     => __('Hero — texto à esquerda sobre a imagem, com eyebrow e botão com ícone', 'upsites-addons'),
 				],
 			]
 		);
@@ -415,6 +454,42 @@ trait UpSites_Carousel_Controls
 
 		$this->end_controls_section();
 
+		// ── Style Tab — Eyebrow ───────────────────────────────────────────
+		$this->start_controls_section('section_style_eyebrow', [
+			'label' => __('Eyebrow', 'upsites-addons'),
+			'tab'   => Controls_Manager::TAB_STYLE,
+		]);
+
+		$this->add_control(
+			'eyebrow_color',
+			[
+				'label'     => __('Cor do texto', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__eyebrow' => 'color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_control(
+			'eyebrow_background_color',
+			[
+				'label'     => __('Cor de fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(255, 255, 255, 0.15)',
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__eyebrow' => 'background-color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'eyebrow_typography',
+				'selector' => '{{WRAPPER}} .upsites-carousel__eyebrow',
+			]
+		);
+
+		$this->end_controls_section();
+
 		// ── Style Tab — Título ────────────────────────────────────────────
 		$this->start_controls_section('section_style_title', [
 			'label' => __('Título', 'upsites-addons'),
@@ -494,6 +569,36 @@ trait UpSites_Carousel_Controls
 			[
 				'name'     => 'button_typography',
 				'selector' => '{{WRAPPER}} .upsites-carousel__button',
+			]
+		);
+
+		$this->add_control(
+			'button_icon_heading',
+			[
+				'label'     => __('Ícone do botão', 'upsites-addons'),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'button_icon_color',
+			[
+				'label'     => __('Cor do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .upsites-carousel__button-icon svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .upsites-carousel__button-icon i'   => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_icon_background_color',
+			[
+				'label'     => __('Cor de fundo do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button-icon' => 'background-color: {{VALUE}}'],
 			]
 		);
 
