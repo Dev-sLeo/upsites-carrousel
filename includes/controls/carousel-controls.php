@@ -140,6 +140,17 @@ trait UpSites_Carousel_Controls
 				'default'        => 4,
 				'tablet_default' => 2,
 				'mobile_default' => 1,
+				// Splide sets each slide's width via JS (inline styles, which
+				// always win over this once applied). This CSS-only
+				// approximation — scoped to :not(.is-initialized) so it never
+				// fights Splide's own inline styles after a successful mount —
+				// exists so the count chosen here is still honored visually if
+				// the JS mount fails to run, most notably inside the Elementor
+				// editor preview iframe, where third-party scripts can break
+				// Splide's own element detection.
+				'selectors'      => [
+					'{{WRAPPER}} .upsites-carousel.splide:not(.is-initialized) .splide__slide' => 'flex: 0 0 calc((100% - (({{VALUE}} - 1) * var(--upsites-carousel-gap, 24px))) / {{VALUE}}); max-width: calc((100% - (({{VALUE}} - 1) * var(--upsites-carousel-gap, 24px))) / {{VALUE}});',
+				],
 			]
 		);
 
@@ -154,6 +165,10 @@ trait UpSites_Carousel_Controls
 					'em' => ['min' => 0, 'max' => 5],
 				],
 				'default'    => ['unit' => 'px', 'size' => 24],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel.splide'                          => '--upsites-carousel-gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .upsites-carousel.splide:not(.is-initialized) .splide__list' => 'gap: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
