@@ -501,12 +501,12 @@ trait UpSites_Carousel_Controls
 				'type'        => Controls_Manager::SLIDER,
 				'size_units'  => ['px', '%'],
 				'range'       => [
-					'px' => ['min' => 100, 'max' => 1000],
+					'px' => ['min' => 100, 'max' => 1400],
 					'%'  => ['min' => 10, 'max' => 100],
 				],
-				'description' => __('Controla a largura do bloco de texto (eyebrow, título, descrição e botão) dentro do card — não a largura do carrossel. Útil nos estilos Overlay e Hero, onde o texto fica sobre a imagem. Deixe em branco para ocupar o espaço todo.', 'upsites-addons'),
+				'description' => __('Controla a largura do bloco de texto (eyebrow, título, descrição e botão) dentro do card — não a largura do carrossel. O bloco fica centralizado na imagem (como um container de página, ex: 1140px), com o texto alinhado dentro dele conforme "Alinhamento do conteúdo". Útil nos estilos Overlay e Hero. Deixe em branco para ocupar o espaço todo.', 'upsites-addons'),
 				'selectors'   => [
-					'{{WRAPPER}} .upsites-carousel__card-body' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .upsites-carousel__card-body' => 'max-width: {{SIZE}}{{UNIT}}; margin-left: auto; margin-right: auto;',
 				],
 			]
 		);
