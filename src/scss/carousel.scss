@@ -277,6 +277,7 @@ body.elementor-editor-active .upsites-carousel.splide {
 			align-items: flex-start;
 			height: 100%;
 			min-height: 480px;
+			max-width: 560px;
 			padding: 56px;
 			text-align: left;
 			color: #fff;
@@ -284,14 +285,12 @@ body.elementor-editor-active .upsites-carousel.splide {
 		}
 
 		.upsites-carousel__title {
-			max-width: 560px;
 			font-size: 40px;
 			font-weight: 700;
 			line-height: 1.15;
 		}
 
 		.upsites-carousel__description {
-			max-width: 480px;
 			font-size: 16px;
 			color: inherit;
 			opacity: 0.9;

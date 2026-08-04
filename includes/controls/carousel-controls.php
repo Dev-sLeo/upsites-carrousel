@@ -469,6 +469,23 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_responsive_control(
+			'content_max_width',
+			[
+				'label'       => __('Largura do conteúdo', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', '%'],
+				'range'       => [
+					'px' => ['min' => 100, 'max' => 1000],
+					'%'  => ['min' => 10, 'max' => 100],
+				],
+				'description' => __('Controla a largura do bloco de texto (eyebrow, título, descrição e botão) dentro do card — não a largura do carrossel. Útil nos estilos Overlay e Hero, onde o texto fica sobre a imagem. Deixe em branco para ocupar o espaço todo.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel__card-body' => 'max-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Container do carrossel ────────────────────────────
@@ -649,24 +666,6 @@ trait UpSites_Carousel_Controls
 			'tab'   => Controls_Manager::TAB_STYLE,
 		]);
 
-		$this->add_control(
-			'button_text_color',
-			[
-				'label'     => __('Cor do texto', 'upsites-addons'),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => ['{{WRAPPER}} .upsites-carousel__button' => 'color: {{VALUE}}'],
-			]
-		);
-
-		$this->add_control(
-			'button_background_color',
-			[
-				'label'     => __('Cor de fundo', 'upsites-addons'),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => ['{{WRAPPER}} .upsites-carousel__button' => 'background-color: {{VALUE}}'],
-			]
-		);
-
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -700,6 +699,45 @@ trait UpSites_Carousel_Controls
 		);
 
 		$this->add_control(
+			'button_transition',
+			[
+				'label'     => __('Transição (ms)', 'upsites-addons'),
+				'type'      => Controls_Manager::NUMBER,
+				'min'       => 0,
+				'max'       => 1000,
+				'step'      => 50,
+				'default'   => 200,
+				'selectors' => [
+					'{{WRAPPER}} .upsites-carousel__button, {{WRAPPER}} .upsites-carousel__button-icon' => 'transition: all {{VALUE}}ms ease;',
+				],
+			]
+		);
+
+		$this->start_controls_tabs('button_style_tabs');
+
+		$this->start_controls_tab('button_style_tab_normal', [
+			'label' => __('Normal', 'upsites-addons'),
+		]);
+
+		$this->add_control(
+			'button_text_color',
+			[
+				'label'     => __('Cor do texto', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button' => 'color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_control(
+			'button_background_color',
+			[
+				'label'     => __('Cor de fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button' => 'background-color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_control(
 			'button_icon_heading',
 			[
 				'label'     => __('Ícone do botão', 'upsites-addons'),
@@ -728,6 +766,64 @@ trait UpSites_Carousel_Controls
 				'selectors' => ['{{WRAPPER}} .upsites-carousel__button-icon' => 'background-color: {{VALUE}}'],
 			]
 		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab('button_style_tab_hover', [
+			'label' => __('Hover', 'upsites-addons'),
+		]);
+
+		$this->add_control(
+			'button_text_color_hover',
+			[
+				'label'     => __('Cor do texto', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button:hover' => 'color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_control(
+			'button_background_color_hover',
+			[
+				'label'     => __('Cor de fundo', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button:hover' => 'background-color: {{VALUE}}'],
+			]
+		);
+
+		$this->add_control(
+			'button_icon_heading_hover',
+			[
+				'label'     => __('Ícone do botão', 'upsites-addons'),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'button_icon_color_hover',
+			[
+				'label'     => __('Cor do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .upsites-carousel__button:hover .upsites-carousel__button-icon svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .upsites-carousel__button:hover .upsites-carousel__button-icon i'   => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_icon_background_color_hover',
+			[
+				'label'     => __('Cor de fundo do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => ['{{WRAPPER}} .upsites-carousel__button:hover .upsites-carousel__button-icon' => 'background-color: {{VALUE}}'],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 
