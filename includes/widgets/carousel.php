@@ -103,7 +103,7 @@ class UpSites_Carousel_Widget extends Widget_Base
 		<?php
 	}
 
-	private function render_card($slide, $card_style)
+	private function render_card($slide, $card_style, $content_alignment = 'left')
 	{
 		$image        = ! empty($slide['image']['url']) ? $slide['image']['url'] : '';
 		$eyebrow      = ! empty($slide['eyebrow']) ? $slide['eyebrow'] : '';
@@ -123,7 +123,7 @@ class UpSites_Carousel_Widget extends Widget_Base
 					<img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>">
 				</div>
 			<?php endif; ?>
-			<div class="upsites-carousel__card-body">
+			<div class="upsites-carousel__card-body upsites-carousel__card-body--align-<?php echo esc_attr($content_alignment); ?>">
 				<?php if ($eyebrow) : ?>
 					<span class="upsites-carousel__eyebrow"><?php echo esc_html($eyebrow); ?></span>
 				<?php endif; ?>
@@ -177,6 +177,7 @@ class UpSites_Carousel_Widget extends Widget_Base
 		$settings   = $this->get_settings_for_display();
 		$slides     = ! empty($settings['slides']) ? $settings['slides'] : [];
 		$card_style = ! empty($settings['card_style']) ? $settings['card_style'] : 'default';
+		$content_alignment = ! empty($settings['content_alignment']) ? $settings['content_alignment'] : 'left';
 		$show_arrows = ! empty($settings['show_arrows']) && 'yes' === $settings['show_arrows'];
 
 		if (empty($slides)) {
@@ -190,7 +191,7 @@ class UpSites_Carousel_Widget extends Widget_Base
 				<ul class="splide__list">
 					<?php foreach ($slides as $slide) : ?>
 						<li class="splide__slide">
-							<?php $this->render_card($slide, $card_style); ?>
+							<?php $this->render_card($slide, $card_style, $content_alignment); ?>
 						</li>
 					<?php endforeach; ?>
 				</ul>

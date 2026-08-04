@@ -469,6 +469,31 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_control(
+			'content_alignment',
+			[
+				'label'       => __('Alinhamento do conteúdo', 'upsites-addons'),
+				'type'        => Controls_Manager::CHOOSE,
+				'options'     => [
+					'left'   => [
+						'title' => __('Esquerda', 'upsites-addons'),
+						'icon'  => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => __('Centralizado', 'upsites-addons'),
+						'icon'  => 'eicon-text-align-center',
+					],
+					'right'  => [
+						'title' => __('Direita', 'upsites-addons'),
+						'icon'  => 'eicon-text-align-right',
+					],
+				],
+				'default'     => 'left',
+				'toggle'      => true,
+				'description' => __('Alinha o bloco de texto (eyebrow, título, descrição e botão) dentro do card — como um parágrafo com wrap.', 'upsites-addons'),
+			]
+		);
+
 		$this->add_responsive_control(
 			'content_max_width',
 			[
@@ -505,9 +530,42 @@ trait UpSites_Carousel_Controls
 					'%'  => ['min' => 10, 'max' => 100],
 					'vw' => ['min' => 10, 'max' => 100],
 				],
-				'description' => __('Deixe em branco para ocupar 100% do espaço disponível.', 'upsites-addons'),
+				'description' => __('Deixe em branco para ocupar 100% do espaço disponível. Por padrão o carrossel fica centralizado (margin: 0 auto); use "Alinhamento do container" abaixo para mudar isso.', 'upsites-addons'),
 				'selectors'   => [
-					'{{WRAPPER}} .upsites-carousel' => 'max-width: {{SIZE}}{{UNIT}}; margin-left: auto; margin-right: auto;',
+					'{{WRAPPER}} .upsites-carousel' => 'max-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'container_alignment',
+			[
+				'label'     => __('Alinhamento do container', 'upsites-addons'),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'   => [
+						'title' => __('Esquerda', 'upsites-addons'),
+						'icon'  => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => __('Centralizado', 'upsites-addons'),
+						'icon'  => 'eicon-h-align-center',
+					],
+					'right'  => [
+						'title' => __('Direita', 'upsites-addons'),
+						'icon'  => 'eicon-h-align-right',
+					],
+				],
+				'default'   => 'center',
+				'toggle'    => true,
+				'condition' => ['container_max_width[size]!' => ''],
+				'selectors_dictionary' => [
+					'left'   => 'margin-left: 0; margin-right: auto;',
+					'center' => 'margin-left: auto; margin-right: auto;',
+					'right'  => 'margin-left: auto; margin-right: 0;',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .upsites-carousel' => '{{VALUE}}',
 				],
 			]
 		);

@@ -20,6 +20,10 @@ body.elementor-editor-active .upsites-carousel.splide {
 
 .upsites-carousel {
 	position: relative;
+	// Centralizado por padrão assim que uma largura máxima é definida no
+	// painel (Estilo → Container do carrossel). Sem max-width isso não
+	// tem efeito visual, já que o elemento já ocupa 100% do espaço.
+	margin: 0 auto;
 
 	ul.splide__list {
 		margin: 0;
@@ -138,6 +142,21 @@ body.elementor-editor-active .upsites-carousel.splide {
 		flex-direction: column;
 		gap: 8px;
 		padding: 20px;
+
+		// "Esquerda" (padrão) usa align-items:stretch — título/descrição
+		// preenchem a largura toda do card e quebram linha normalmente.
+		// Centralizado/à direita encolhem o bloco ao tamanho do conteúdo
+		// (como um parágrafo com wrap) para o alinhamento fazer sentido
+		// visualmente, e não só alinhar o texto dentro de uma caixa cheia.
+		&--align-center {
+			align-items: center;
+			text-align: center;
+		}
+
+		&--align-right {
+			align-items: flex-end;
+			text-align: right;
+		}
 	}
 
 	.upsites-carousel__title {
@@ -274,12 +293,10 @@ body.elementor-editor-active .upsites-carousel.splide {
 			position: relative;
 			z-index: 1;
 			justify-content: center;
-			align-items: flex-start;
 			height: 100%;
 			min-height: 480px;
 			max-width: 560px;
 			padding: 56px;
-			text-align: left;
 			color: #fff;
 			gap: 16px;
 		}
