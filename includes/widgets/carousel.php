@@ -123,27 +123,29 @@ class UpSites_Carousel_Widget extends Widget_Base
 					<img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>">
 				</div>
 			<?php endif; ?>
-			<div class="upsites-carousel__card-body upsites-carousel__card-body--align-<?php echo esc_attr($content_alignment); ?>">
-				<?php if ($eyebrow) : ?>
-					<span class="upsites-carousel__eyebrow"><?php echo esc_html($eyebrow); ?></span>
-				<?php endif; ?>
-				<?php if ($title) : ?>
-					<h3 class="upsites-carousel__title"><?php echo esc_html($title); ?></h3>
-				<?php endif; ?>
-				<?php if ($description && 'minimal' !== $card_style) : ?>
-					<p class="upsites-carousel__description"><?php echo esc_html($description); ?></p>
-				<?php endif; ?>
-				<?php if ($show_button && $button_text) : ?>
-					<a class="upsites-carousel__button<?php echo $has_icon ? ' upsites-carousel__button--has-icon' : ''; ?>" href="<?php echo esc_url($button_url); ?>"<?php echo $target . $rel; ?>>
-						<?php if ($has_icon && 'before' === $icon_position) : ?>
-							<?php $this->render_button_icon($slide); ?>
-						<?php endif; ?>
-						<span class="upsites-carousel__button-text"><?php echo esc_html($button_text); ?></span>
-						<?php if ($has_icon && 'after' === $icon_position) : ?>
-							<?php $this->render_button_icon($slide); ?>
-						<?php endif; ?>
-					</a>
-				<?php endif; ?>
+			<div class="upsites-carousel__card-body">
+				<div class="upsites-carousel__content upsites-carousel__content--align-<?php echo esc_attr($content_alignment); ?>">
+					<?php if ($eyebrow) : ?>
+						<span class="upsites-carousel__eyebrow"><?php echo esc_html($eyebrow); ?></span>
+					<?php endif; ?>
+					<?php if ($title) : ?>
+						<h3 class="upsites-carousel__title"><?php echo esc_html($title); ?></h3>
+					<?php endif; ?>
+					<?php if ($description && 'minimal' !== $card_style) : ?>
+						<p class="upsites-carousel__description"><?php echo esc_html($description); ?></p>
+					<?php endif; ?>
+					<?php if ($show_button && $button_text) : ?>
+						<a class="upsites-carousel__button<?php echo $has_icon ? ' upsites-carousel__button--has-icon' : ''; ?>" href="<?php echo esc_url($button_url); ?>"<?php echo $target . $rel; ?>>
+							<?php if ($has_icon && 'before' === $icon_position) : ?>
+								<?php $this->render_button_icon($slide); ?>
+							<?php endif; ?>
+							<span class="upsites-carousel__button-text"><?php echo esc_html($button_text); ?></span>
+							<?php if ($has_icon && 'after' === $icon_position) : ?>
+								<?php $this->render_button_icon($slide); ?>
+							<?php endif; ?>
+						</a>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 		<?php

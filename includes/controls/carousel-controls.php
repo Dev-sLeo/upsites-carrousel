@@ -464,7 +464,41 @@ trait UpSites_Carousel_Controls
 				],
 				'description' => __('Distância entre eyebrow, título, descrição e botão dentro do card. As margens individuais de cada elemento, se definidas, somam-se a este valor.', 'upsites-addons'),
 				'selectors'   => [
-					'{{WRAPPER}} .upsites-carousel__card-body' => 'gap: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .upsites-carousel__content' => 'gap: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'container_content_width',
+			[
+				'label'       => __('Largura do container', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', '%'],
+				'range'       => [
+					'px' => ['min' => 100, 'max' => 1400],
+					'%'  => ['min' => 10, 'max' => 100],
+				],
+				'description' => __('Faixa que fica sempre centralizada sobre a imagem (a imagem em si nunca muda — continua sempre 100%). Pense nela como o container padrão do site, ex: 1140px. É dentro dela que a largura e o alinhamento do conteúdo abaixo fazem efeito. Deixe em branco para ocupar o espaço todo.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel__card-body' => 'max-width: {{SIZE}}{{UNIT}}; margin-left: auto; margin-right: auto;',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'content_max_width',
+			[
+				'label'       => __('Largura do conteúdo', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', '%'],
+				'range'       => [
+					'px' => ['min' => 100, 'max' => 1400],
+					'%'  => ['min' => 10, 'max' => 100],
+				],
+				'description' => __('Largura do bloco de texto (eyebrow, título, descrição e botão) dentro do container acima, ex: 800px. Deixe em branco para ocupar o container todo.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel__content' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -490,24 +524,7 @@ trait UpSites_Carousel_Controls
 				],
 				'default'     => 'left',
 				'toggle'      => true,
-				'description' => __('Alinha o bloco de texto (eyebrow, título, descrição e botão) dentro do card — como um parágrafo com wrap.', 'upsites-addons'),
-			]
-		);
-
-		$this->add_responsive_control(
-			'content_max_width',
-			[
-				'label'       => __('Largura do conteúdo', 'upsites-addons'),
-				'type'        => Controls_Manager::SLIDER,
-				'size_units'  => ['px', '%'],
-				'range'       => [
-					'px' => ['min' => 100, 'max' => 1400],
-					'%'  => ['min' => 10, 'max' => 100],
-				],
-				'description' => __('Controla a largura do bloco de texto (eyebrow, título, descrição e botão) dentro do card — não a largura do carrossel. O bloco fica centralizado na imagem (como um container de página, ex: 1140px), com o texto alinhado dentro dele conforme "Alinhamento do conteúdo". Útil nos estilos Overlay e Hero. Deixe em branco para ocupar o espaço todo.', 'upsites-addons'),
-				'selectors'   => [
-					'{{WRAPPER}} .upsites-carousel__card-body' => 'max-width: {{SIZE}}{{UNIT}}; margin-left: auto; margin-right: auto;',
-				],
+				'description' => __('Posição do bloco de conteúdo dentro do container: esquerda, centralizado ou direita.', 'upsites-addons'),
 			]
 		);
 

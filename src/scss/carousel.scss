@@ -137,24 +137,43 @@ body.elementor-editor-active .upsites-carousel.splide {
 		}
 	}
 
+	// Container — faixa centralizada sobre a imagem (sempre 100%), ex: 1140px.
+	// A imagem em si (upsites-carousel__media) é irmã deste elemento e nunca
+	// é afetada por ele.
 	.upsites-carousel__card-body {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		// Explícito (não confiar em align-items:stretch do pai): um item flex
+		// com width:auto que também recebe margin-left/right:auto (do
+		// controle "Largura do container") encolhe ao tamanho do conteúdo em
+		// vez de esticar e só depois centralizar — width:100% garante que
+		// ele sempre preencha o espaço disponível antes do max-width/margin
+		// entrarem em ação, no clássico padrão de "container" responsivo.
+		width: 100%;
 		padding: 20px;
+	}
 
-		// "Esquerda" (padrão) usa align-items:stretch — título/descrição
-		// preenchem a largura toda do card e quebram linha normalmente.
-		// Centralizado/à direita encolhem o bloco ao tamanho do conteúdo
-		// (como um parágrafo com wrap) para o alinhamento fazer sentido
-		// visualmente, e não só alinhar o texto dentro de uma caixa cheia.
+	// Conteúdo — bloco de texto dentro do container, com largura e
+	// alinhamento próprios (ex: 800px, à esquerda/centro/direita).
+	.upsites-carousel__content {
+		display: flex;
+		flex: 1 1 auto;
+		flex-direction: column;
+		gap: 8px;
+		width: 100%;
+
+		// "Esquerda" (padrão) usa o align-self padrão (stretch/start).
+		// `align-self`, não `margin: auto`, é o jeito confiável de mover um
+		// item flex dentro de um container flex-direction:column — margin
+		// auto no eixo cruzado tem casos de borda inconsistentes entre
+		// navegadores quando o item já tem largura definida via max-width.
 		&--align-center {
-			align-items: center;
+			align-self: center;
 			text-align: center;
 		}
 
 		&--align-right {
-			align-items: flex-end;
+			align-self: flex-end;
 			text-align: right;
 		}
 	}
@@ -298,6 +317,9 @@ body.elementor-editor-active .upsites-carousel.splide {
 			max-width: 560px;
 			padding: 56px;
 			color: #fff;
+		}
+
+		.upsites-carousel__content {
 			gap: 16px;
 		}
 
