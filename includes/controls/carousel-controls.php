@@ -452,6 +452,73 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_responsive_control(
+			'card_body_gap',
+			[
+				'label'       => __('Espaçamento entre os elementos', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', 'em'],
+				'range'       => [
+					'px' => ['min' => 0, 'max' => 60],
+					'em' => ['min' => 0, 'max' => 4],
+				],
+				'description' => __('Distância entre eyebrow, título, descrição e botão dentro do card. As margens individuais de cada elemento, se definidas, somam-se a este valor.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel__card-body' => 'gap: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		// ── Style Tab — Container do carrossel ────────────────────────────
+		$this->start_controls_section('section_style_container', [
+			'label' => __('Container do carrossel', 'upsites-addons'),
+			'tab'   => Controls_Manager::TAB_STYLE,
+		]);
+
+		$this->add_responsive_control(
+			'container_max_width',
+			[
+				'label'       => __('Largura máxima', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', '%', 'vw'],
+				'range'       => [
+					'px' => ['min' => 200, 'max' => 1600],
+					'%'  => ['min' => 10, 'max' => 100],
+					'vw' => ['min' => 10, 'max' => 100],
+				],
+				'description' => __('Deixe em branco para ocupar 100% do espaço disponível.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel' => 'max-width: {{SIZE}}{{UNIT}}; margin-left: auto; margin-right: auto;',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'container_margin',
+			[
+				'label'      => __('Margem externa', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'container_padding',
+			[
+				'label'      => __('Espaçamento interno', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Eyebrow ───────────────────────────────────────────
@@ -488,6 +555,18 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_responsive_control(
+			'eyebrow_margin',
+			[
+				'label'      => __('Margem', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel__eyebrow' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Título ────────────────────────────────────────────
@@ -513,6 +592,18 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_responsive_control(
+			'title_margin',
+			[
+				'label'      => __('Margem', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel__title' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// ── Style Tab — Descrição ─────────────────────────────────────────
@@ -535,6 +626,18 @@ trait UpSites_Carousel_Controls
 			[
 				'name'     => 'description_typography',
 				'selector' => '{{WRAPPER}} .upsites-carousel__description',
+			]
+		);
+
+		$this->add_responsive_control(
+			'description_margin',
+			[
+				'label'      => __('Margem', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel__description' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
 			]
 		);
 
@@ -569,6 +672,30 @@ trait UpSites_Carousel_Controls
 			[
 				'name'     => 'button_typography',
 				'selector' => '{{WRAPPER}} .upsites-carousel__button',
+			]
+		);
+
+		$this->add_responsive_control(
+			'button_margin',
+			[
+				'label'      => __('Margem', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel__button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'button_padding',
+			[
+				'label'      => __('Espaçamento interno', 'upsites-addons'),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => ['px', 'em', '%'],
+				'selectors'  => [
+					'{{WRAPPER}} .upsites-carousel__button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
 			]
 		);
 
@@ -642,6 +769,38 @@ trait UpSites_Carousel_Controls
 				'range'      => ['px' => ['min' => 20, 'max' => 80]],
 				'selectors'  => [
 					'{{WRAPPER}} .splide__arrow, {{WRAPPER}} .upsites-carousel__custom-arrow' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'arrows_spacing',
+			[
+				'label'       => __('Espaçamento das bordas', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px', '%'],
+				'range'       => [
+					'px' => ['min' => -40, 'max' => 100],
+					'%'  => ['min' => -20, 'max' => 20],
+				],
+				'default'     => ['unit' => 'px', 'size' => 0],
+				'description' => __('Distância das setas até a borda esquerda/direita do carrossel. Valores negativos empurram as setas para fora do carrossel.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .splide__arrow--prev, {{WRAPPER}} .upsites-carousel__custom-arrow.splide__arrow--prev' => 'left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .splide__arrow--next, {{WRAPPER}} .upsites-carousel__custom-arrow.splide__arrow--next' => 'right: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'arrows_padding',
+			[
+				'label'      => __('Espaçamento interno', 'upsites-addons'),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range'      => ['px' => ['min' => 0, 'max' => 30]],
+				'selectors'  => [
+					'{{WRAPPER}} .splide__arrow svg, {{WRAPPER}} .upsites-carousel__custom-arrow svg, {{WRAPPER}} .upsites-carousel__custom-arrow img, {{WRAPPER}} .upsites-carousel__custom-arrow i' => 'padding: {{SIZE}}{{UNIT}}; box-sizing: border-box;',
 				],
 			]
 		);
