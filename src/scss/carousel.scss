@@ -118,6 +118,18 @@ body.elementor-editor-active .upsites-carousel.splide {
 			transform: none;
 		}
 	}
+
+	// No estilo Hero as bullets ficam sobre a própria imagem — como as
+	// setas — em vez de abaixo do carrossel, e centralizadas na horizontal.
+	&.upsites-carousel--hero .splide__pagination {
+		position: absolute;
+		z-index: 2;
+		bottom: 24px;
+		left: 50%;
+		width: auto;
+		margin: 0;
+		transform: translateX(-50%);
+	}
 }
 
 .upsites-carousel__card {
@@ -288,6 +300,14 @@ body.elementor-editor-active .upsites-carousel.splide {
 		position: relative;
 		min-height: 480px;
 		background: #1a1a1a;
+
+		// Modo "altura total": o slide ocupa a tela inteira (100vh), descontando
+		// o espaço do header/menu fixo — o valor de desconto vem do controle
+		// "Altura do header/menu a descontar" (ver carousel-controls.php), com
+		// 80px como fallback aqui caso o seletor do controle não seja aplicado.
+		.upsites-carousel--full-height & {
+			min-height: calc(100vh - 80px);
+		}
 
 		.upsites-carousel__media {
 			position: absolute;

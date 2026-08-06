@@ -181,14 +181,20 @@ class UpSites_Carousel_Widget extends Widget_Base
 		$card_style = ! empty($settings['card_style']) ? $settings['card_style'] : 'default';
 		$content_alignment = ! empty($settings['content_alignment']) ? $settings['content_alignment'] : 'left';
 		$show_arrows = ! empty($settings['show_arrows']) && 'yes' === $settings['show_arrows'];
+		$hero_full_height = 'hero' === $card_style && ! empty($settings['hero_full_height']) && 'yes' === $settings['hero_full_height'];
 
 		if (empty($slides)) {
 			return;
 		}
 
 		$frontend_settings = $this->build_splide_settings($settings);
+
+		$wrapper_classes = ['upsites-carousel', 'upsites-carousel--' . $card_style, 'splide'];
+		if ($hero_full_height) {
+			$wrapper_classes[] = 'upsites-carousel--full-height';
+		}
 		?>
-		<div class="upsites-carousel splide" data-settings="<?php echo esc_attr(wp_json_encode($frontend_settings)); ?>">
+		<div class="<?php echo esc_attr(implode(' ', $wrapper_classes)); ?>" data-settings="<?php echo esc_attr(wp_json_encode($frontend_settings)); ?>">
 			<div class="splide__track">
 				<ul class="splide__list">
 					<?php foreach ($slides as $slide) : ?>

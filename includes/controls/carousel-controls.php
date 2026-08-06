@@ -168,6 +168,39 @@ trait UpSites_Carousel_Controls
 			]
 		);
 
+		$this->add_control(
+			'hero_full_height',
+			[
+				'label'        => __('Altura total (hero full height)', 'upsites-addons'),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __('Sim', 'upsites-addons'),
+				'label_off'    => __('Não', 'upsites-addons'),
+				'return_value' => 'yes',
+				'default'      => '',
+				'condition'    => ['card_style' => 'hero'],
+				'description'  => __('Faz o slide ocupar a altura da tela (100vh), descontando a altura do header/menu abaixo, para criar um efeito de hero cheio sem cobrir o menu.', 'upsites-addons'),
+			]
+		);
+
+		$this->add_responsive_control(
+			'hero_header_height',
+			[
+				'label'       => __('Altura do header/menu a descontar', 'upsites-addons'),
+				'type'        => Controls_Manager::SLIDER,
+				'size_units'  => ['px'],
+				'range'       => [
+					'px' => ['min' => 0, 'max' => 300],
+				],
+				'default'     => ['size' => 80, 'unit' => 'px'],
+				'condition'   => ['card_style' => 'hero', 'hero_full_height' => 'yes'],
+				'description' => __('Espaço reservado para o header fixo do site, que é subtraído dos 100vh para o hero não ficar por baixo do menu.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel--hero.upsites-carousel--full-height .upsites-carousel__card,
+					 {{WRAPPER}} .upsites-carousel--hero.upsites-carousel--full-height .upsites-carousel__card-body' => 'min-height: calc(100vh - {{SIZE}}{{UNIT}});',
+				],
+			]
+		);
+
 		$this->add_responsive_control(
 			'slides_per_view',
 			[
@@ -525,6 +558,33 @@ trait UpSites_Carousel_Controls
 				'default'     => 'left',
 				'toggle'      => true,
 				'description' => __('Posição do bloco de conteúdo dentro do container: esquerda, centralizado ou direita.', 'upsites-addons'),
+			]
+		);
+
+		$this->add_responsive_control(
+			'content_vertical_alignment',
+			[
+				'label'       => __('Alinhamento vertical do conteúdo', 'upsites-addons'),
+				'type'        => Controls_Manager::CHOOSE,
+				'options'     => [
+					'flex-start' => [
+						'title' => __('Topo', 'upsites-addons'),
+						'icon'  => 'eicon-v-align-top',
+					],
+					'center'     => [
+						'title' => __('Meio', 'upsites-addons'),
+						'icon'  => 'eicon-v-align-middle',
+					],
+					'flex-end'   => [
+						'title' => __('Base', 'upsites-addons'),
+						'icon'  => 'eicon-v-align-bottom',
+					],
+				],
+				'toggle'      => true,
+				'description' => __('Posição vertical do bloco de conteúdo dentro do card. Deixe em branco para usar o padrão do estilo do card escolhido.', 'upsites-addons'),
+				'selectors'   => [
+					'{{WRAPPER}} .upsites-carousel__card-body' => 'justify-content: {{VALUE}};',
+				],
 			]
 		);
 
