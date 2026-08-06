@@ -12,19 +12,18 @@ function mountSplide( el ) {
 		settings = {};
 	}
 
-	const autoScroll = settings.autoScroll;
-	delete settings.autoScroll;
+	// `autoScroll` stays inside `settings` and is handed to the Splide
+	// constructor as-is (Splide/the AutoScroll extension read it straight off
+	// the options object). Assigning `splide.options = {...}` *after*
+	// construction but *before* `.mount()` — which an earlier version of this
+	// code did to bolt autoScroll on — crashes inside Splide's internal
+	// options setter, since it reaches into `Components.Media`, which only
+	// exists once mount() has started.
+	const hasAutoScroll = !! settings.autoScroll;
 
 	try {
 		const splide = new Splide( el, settings );
-
-		if ( autoScroll ) {
-			splide.options = { ...splide.options, autoScroll };
-			splide.mount( { AutoScroll } );
-		} else {
-			splide.mount();
-		}
-
+		splide.mount( hasAutoScroll ? { AutoScroll } : undefined );
 		el.classList.add( 'is-initialized' );
 	} catch ( err ) {
 		// Some environments (e.g. third-party scripts patching the Elementor
@@ -32,6 +31,7 @@ function mountSplide( el ) {
 		// fail even though the markup is correct; fail silently here instead
 		// of throwing, since the CSS fallback keeps the static markup visible
 		// and the real front-end mounts normally.
+		console.error( '[upsites-carousel] mount failed', err ); // eslint-disable-line no-console
 	}
 }
 
@@ -70,6 +70,11 @@ function initAll( context ) {
 }
 
 document.addEventListener( 'DOMContentLoaded', () => initAll() );
+// Footer-enqueued scripts commonly parse after DOMContentLoaded has already
+// fired, in which case the listener above never runs — cover that case too.
+if ( document.readyState !== 'loading' ) {
+	initAll();
+}
 
 function bindElementorHook() {
 	window.elementorFrontend.hooks.addAction( 'frontend/element_ready/upsites-carousel.default', ( $scope ) => {
