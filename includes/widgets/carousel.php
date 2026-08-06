@@ -263,6 +263,18 @@ class UpSites_Carousel_Widget extends Widget_Base
 		$hero_full_height = 'hero' === $card_style && ! empty($settings['hero_full_height']) && 'yes' === $settings['hero_full_height'];
 
 		if (empty($slides)) {
+			// A blog vazio (0 posts publicados no tipo escolhido, meta_key
+			// errada, etc.) faz a consulta CPT voltar vazia, e sem esse aviso
+			// o widget simplesmente não renderiza nada — o usuário só via um
+			// espaço em branco sem pista do motivo. O aviso só aparece no
+			// editor; no site publicado continua não renderizando nada,
+			// como antes.
+			if ('cpt' === $slides_source && \Elementor\Plugin::$instance->editor->is_edit_mode()) {
+				printf(
+					'<div style="padding:20px;text-align:center;background:#fff3cd;color:#664d03;border:1px solid #ffe69c;border-radius:4px;">%s</div>',
+					esc_html__('Nenhum post publicado foi encontrado para o tipo de conteúdo selecionado (ou o mapeamento de campos está incorreto). O carrossel ficará em branco no site até que existam posts publicados.', 'upsites-addons')
+				);
+			}
 			return;
 		}
 
