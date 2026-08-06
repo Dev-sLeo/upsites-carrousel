@@ -22,6 +22,246 @@ trait UpSites_Carousel_Controls
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		]);
 
+		$this->add_control(
+			'slides_source',
+			[
+				'label'       => __('Origem dos slides', 'upsites-addons'),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'manual',
+				'options'     => [
+					'manual' => __('Manual (repeater)', 'upsites-addons'),
+					'cpt'    => __('Custom Post Type', 'upsites-addons'),
+				],
+				'description' => __('Manual: você cadastra cada slide abaixo. CPT: os slides são gerados automaticamente a partir dos posts de um tipo de conteúdo, mapeando os campos de cada post para o card.', 'upsites-addons'),
+			]
+		);
+
+		$post_type_options = [];
+		foreach (get_post_types(['public' => true], 'objects') as $post_type_object) {
+			$post_type_options[ $post_type_object->name ] = $post_type_object->label;
+		}
+
+		$this->add_control(
+			'cpt_post_type',
+			[
+				'label'     => __('Tipo de conteúdo (CPT)', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'post',
+				'options'   => $post_type_options,
+				'condition' => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_posts_count',
+			[
+				'label'       => __('Quantidade de posts', 'upsites-addons'),
+				'type'        => Controls_Manager::NUMBER,
+				'min'         => -1,
+				'max'         => 50,
+				'default'     => 6,
+				'description' => __('Use -1 para trazer todos os posts publicados.', 'upsites-addons'),
+				'condition'   => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_orderby',
+			[
+				'label'     => __('Ordenar por', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'date',
+				'options'   => [
+					'date'       => __('Data', 'upsites-addons'),
+					'title'      => __('Título', 'upsites-addons'),
+					'menu_order' => __('Ordem do menu', 'upsites-addons'),
+					'rand'       => __('Aleatório', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_order',
+			[
+				'label'     => __('Direção', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'DESC',
+				'options'   => [
+					'DESC' => __('Decrescente', 'upsites-addons'),
+					'ASC'  => __('Crescente', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt', 'cpt_orderby!' => 'rand'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_field_mapping_heading',
+			[
+				'label'     => __('Mapeamento de campos', 'upsites-addons'),
+				'type'      => Controls_Manager::HEADING,
+				'condition' => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_image_source',
+			[
+				'label'       => __('Imagem', 'upsites-addons'),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'featured_image',
+				'options'     => [
+					'featured_image' => __('Imagem destacada', 'upsites-addons'),
+					'meta'           => __('Campo customizado (meta)', 'upsites-addons'),
+				],
+				'condition'   => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_image_meta_key',
+			[
+				'label'       => __('Chave do campo — Imagem', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'description' => __('Nome (meta_key) do campo customizado que guarda o ID ou a URL da imagem, ex: campo do ACF.', 'upsites-addons'),
+				'condition'   => ['slides_source' => 'cpt', 'cpt_image_source' => 'meta'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_eyebrow_meta_key',
+			[
+				'label'       => __('Chave do campo — Eyebrow', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'description' => __('Nome (meta_key) do campo customizado usado como eyebrow. Deixe em branco para não exibir.', 'upsites-addons'),
+				'condition'   => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_title_source',
+			[
+				'label'     => __('Título', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'post_title',
+				'options'   => [
+					'post_title' => __('Título do post', 'upsites-addons'),
+					'meta'       => __('Campo customizado (meta)', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_title_meta_key',
+			[
+				'label'       => __('Chave do campo — Título', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'condition'   => ['slides_source' => 'cpt', 'cpt_title_source' => 'meta'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_description_source',
+			[
+				'label'     => __('Descrição', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'excerpt',
+				'options'   => [
+					'excerpt' => __('Resumo do post', 'upsites-addons'),
+					'content' => __('Conteúdo do post', 'upsites-addons'),
+					'meta'    => __('Campo customizado (meta)', 'upsites-addons'),
+					'none'    => __('Não exibir', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_description_meta_key',
+			[
+				'label'       => __('Chave do campo — Descrição', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'condition'   => ['slides_source' => 'cpt', 'cpt_description_source' => 'meta'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_show_button',
+			[
+				'label'        => __('Mostrar botão', 'upsites-addons'),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __('Sim', 'upsites-addons'),
+				'label_off'    => __('Não', 'upsites-addons'),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'condition'    => ['slides_source' => 'cpt'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_button_text',
+			[
+				'label'       => __('Texto do botão', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'default'     => __('Saiba mais', 'upsites-addons'),
+				'condition'   => ['slides_source' => 'cpt', 'cpt_show_button' => 'yes'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_button_link_source',
+			[
+				'label'     => __('Link do botão', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'permalink',
+				'options'   => [
+					'permalink' => __('Link do post', 'upsites-addons'),
+					'meta'      => __('Campo customizado (meta)', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt', 'cpt_show_button' => 'yes'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_button_link_meta_key',
+			[
+				'label'       => __('Chave do campo — Link do botão', 'upsites-addons'),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'condition'   => ['slides_source' => 'cpt', 'cpt_show_button' => 'yes', 'cpt_button_link_source' => 'meta'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_button_icon',
+			[
+				'label'     => __('Ícone do botão', 'upsites-addons'),
+				'type'      => Controls_Manager::ICONS,
+				'skin'      => 'inline',
+				'condition' => ['slides_source' => 'cpt', 'cpt_show_button' => 'yes'],
+			]
+		);
+
+		$this->add_control(
+			'cpt_button_icon_position',
+			[
+				'label'     => __('Posição do ícone', 'upsites-addons'),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'after',
+				'options'   => [
+					'before' => __('Antes do texto', 'upsites-addons'),
+					'after'  => __('Depois do texto', 'upsites-addons'),
+				],
+				'condition' => ['slides_source' => 'cpt', 'cpt_show_button' => 'yes', 'cpt_button_icon[value]!' => ''],
+			]
+		);
+
 		$repeater = new Repeater();
 
 		$repeater->add_control(
@@ -142,6 +382,7 @@ trait UpSites_Carousel_Controls
 					['title' => __('Slide 4', 'upsites-addons')],
 				],
 				'title_field' => '{{{ title }}}',
+				'condition'   => ['slides_source' => 'manual'],
 			]
 		);
 

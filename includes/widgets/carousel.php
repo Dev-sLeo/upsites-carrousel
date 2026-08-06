@@ -91,6 +91,84 @@ class UpSites_Carousel_Widget extends Widget_Base
 		];
 	}
 
+	/**
+	 * Queries a CPT and maps each post onto the same slide shape the manual
+	 * repeater produces (see the `slides` repeater fields in
+	 * carousel-controls.php), so render_card() can stay agnostic of where the
+	 * slide data came from.
+	 */
+	private function get_slides_from_cpt($settings)
+	{
+		$post_type = ! empty($settings['cpt_post_type']) ? $settings['cpt_post_type'] : 'post';
+
+		$query = new \WP_Query([
+			'post_type'      => $post_type,
+			'post_status'    => 'publish',
+			'posts_per_page' => isset($settings['cpt_posts_count']) ? (int) $settings['cpt_posts_count'] : 6,
+			'orderby'        => ! empty($settings['cpt_orderby']) ? $settings['cpt_orderby'] : 'date',
+			'order'          => ! empty($settings['cpt_order']) ? $settings['cpt_order'] : 'DESC',
+			'no_found_rows'  => true,
+		]);
+
+		$show_button      = ! empty($settings['cpt_show_button']) && 'yes' === $settings['cpt_show_button'];
+		$image_source     = ! empty($settings['cpt_image_source']) ? $settings['cpt_image_source'] : 'featured_image';
+		$title_source     = ! empty($settings['cpt_title_source']) ? $settings['cpt_title_source'] : 'post_title';
+		$description_source = ! empty($settings['cpt_description_source']) ? $settings['cpt_description_source'] : 'excerpt';
+		$button_link_source = ! empty($settings['cpt_button_link_source']) ? $settings['cpt_button_link_source'] : 'permalink';
+
+		$slides = [];
+
+		foreach ($query->posts as $post) {
+			$image_url = '';
+			if ('meta' === $image_source && ! empty($settings['cpt_image_meta_key'])) {
+				$meta_value = get_post_meta($post->ID, $settings['cpt_image_meta_key'], true);
+				$image_url  = is_numeric($meta_value) ? wp_get_attachment_url((int) $meta_value) : $meta_value;
+			} else {
+				$image_url = get_the_post_thumbnail_url($post->ID, 'large');
+			}
+
+			$eyebrow = '';
+			if (! empty($settings['cpt_eyebrow_meta_key'])) {
+				$eyebrow = get_post_meta($post->ID, $settings['cpt_eyebrow_meta_key'], true);
+			}
+
+			if ('meta' === $title_source && ! empty($settings['cpt_title_meta_key'])) {
+				$title = get_post_meta($post->ID, $settings['cpt_title_meta_key'], true);
+			} else {
+				$title = get_the_title($post);
+			}
+
+			$description = '';
+			if ('excerpt' === $description_source) {
+				$description = has_excerpt($post) ? get_the_excerpt($post) : wp_trim_words(wp_strip_all_tags($post->post_content), 30);
+			} elseif ('content' === $description_source) {
+				$description = wp_strip_all_tags($post->post_content);
+			} elseif ('meta' === $description_source && ! empty($settings['cpt_description_meta_key'])) {
+				$description = get_post_meta($post->ID, $settings['cpt_description_meta_key'], true);
+			}
+
+			$button_url = get_permalink($post);
+			if ('meta' === $button_link_source && ! empty($settings['cpt_button_link_meta_key'])) {
+				$meta_link  = get_post_meta($post->ID, $settings['cpt_button_link_meta_key'], true);
+				$button_url = is_array($meta_link) ? ($meta_link['url'] ?? $button_url) : ($meta_link ?: $button_url);
+			}
+
+			$slides[] = [
+				'image'                => ['url' => $image_url],
+				'eyebrow'              => $eyebrow,
+				'title'                => $title,
+				'description'          => $description,
+				'show_button'          => $show_button ? 'yes' : '',
+				'button_text'          => ! empty($settings['cpt_button_text']) ? $settings['cpt_button_text'] : '',
+				'button_link'          => ['url' => $button_url],
+				'button_icon'          => $settings['cpt_button_icon'] ?? [],
+				'button_icon_position' => ! empty($settings['cpt_button_icon_position']) ? $settings['cpt_button_icon_position'] : 'after',
+			];
+		}
+
+		return $slides;
+	}
+
 	private function render_button_icon($slide)
 	{
 		if (empty($slide['button_icon']['value'])) {
@@ -177,7 +255,8 @@ class UpSites_Carousel_Widget extends Widget_Base
 	protected function render()
 	{
 		$settings   = $this->get_settings_for_display();
-		$slides     = ! empty($settings['slides']) ? $settings['slides'] : [];
+		$slides_source = ! empty($settings['slides_source']) ? $settings['slides_source'] : 'manual';
+		$slides     = 'cpt' === $slides_source ? $this->get_slides_from_cpt($settings) : (! empty($settings['slides']) ? $settings['slides'] : []);
 		$card_style = ! empty($settings['card_style']) ? $settings['card_style'] : 'default';
 		$content_alignment = ! empty($settings['content_alignment']) ? $settings['content_alignment'] : 'left';
 		$show_arrows = ! empty($settings['show_arrows']) && 'yes' === $settings['show_arrows'];
