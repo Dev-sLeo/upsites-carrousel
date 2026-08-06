@@ -530,16 +530,16 @@ trait UpSites_Carousel_Controls
 
 		$this->end_controls_section();
 
-		// ── Style Tab — Container do carrossel ────────────────────────────
+		// ── Style Tab — Largura do carrossel (widget inteiro, imagem incluída) ──
 		$this->start_controls_section('section_style_container', [
-			'label' => __('Container do carrossel', 'upsites-addons'),
+			'label' => __('Largura do carrossel (widget inteiro)', 'upsites-addons'),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		]);
 
 		$this->add_responsive_control(
 			'container_max_width',
 			[
-				'label'       => __('Largura máxima', 'upsites-addons'),
+				'label'       => __('Largura máxima do carrossel', 'upsites-addons'),
 				'type'        => Controls_Manager::SLIDER,
 				'size_units'  => ['px', '%', 'vw'],
 				'range'       => [
@@ -547,7 +547,7 @@ trait UpSites_Carousel_Controls
 					'%'  => ['min' => 10, 'max' => 100],
 					'vw' => ['min' => 10, 'max' => 100],
 				],
-				'description' => __('Deixe em branco para ocupar 100% do espaço disponível. Por padrão o carrossel fica centralizado (margin: 0 auto); use "Alinhamento do container" abaixo para mudar isso.', 'upsites-addons'),
+				'description' => __('⚠️ Isto encolhe o WIDGET INTEIRO, incluindo as imagens dos slides — não é o mesmo controle que "Largura do container" da seção Card (esse aqui é para quando você quer o carrossel inteiro menor que 100% da coluna, ex: numa sidebar). Deixe em branco para ocupar o espaço todo disponível (recomendado na maioria dos casos, inclusive para hero full-bleed). Por padrão fica centralizado (margin: 0 auto); use "Alinhamento" abaixo para mudar isso.', 'upsites-addons'),
 				'selectors'   => [
 					'{{WRAPPER}} .upsites-carousel' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
@@ -557,7 +557,7 @@ trait UpSites_Carousel_Controls
 		$this->add_responsive_control(
 			'container_alignment',
 			[
-				'label'     => __('Alinhamento do container', 'upsites-addons'),
+				'label'     => __('Alinhamento do carrossel', 'upsites-addons'),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
